@@ -1,0 +1,430 @@
+<title>AI CapEx × 메모리 사이클 — MU·SNDK 투자전략 리포트</title>
+<style>
+  .rpt {
+    color-scheme: light;
+    --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+    --accent:#2a78d6; --ramp-a:#86b6ef; --ramp-b:#2a78d6; --ramp-c:#104281;
+    --s-googl:#2a78d6; --s-msft:#eb6834; --s-amzn:#1baf7a; --s-meta:#eda100; --s-orcl:#e87ba4;
+    --bear:#e34948; --up:#006300; --down:#d03b3b;
+    font-family: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background:var(--page); color:var(--ink); line-height:1.55; margin:0; padding:0 20px 64px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .rpt {
+      color-scheme: dark;
+      --page:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+      --accent:#3987e5; --ramp-a:#6da7ec; --ramp-b:#3987e5; --ramp-c:#1c5cab;
+      --s-googl:#3987e5; --s-msft:#d95926; --s-amzn:#199e70; --s-meta:#c98500; --s-orcl:#d55181;
+      --bear:#e66767; --up:#0ca30c; --down:#e66767;
+    }
+  }
+  :root[data-theme="dark"] .rpt {
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+    --accent:#3987e5; --ramp-a:#6da7ec; --ramp-b:#3987e5; --ramp-c:#1c5cab;
+    --s-googl:#3987e5; --s-msft:#d95926; --s-amzn:#199e70; --s-meta:#c98500; --s-orcl:#d55181;
+    --bear:#e66767; --up:#0ca30c; --down:#e66767;
+  }
+  .rpt .wrap { max-width:980px; margin:0 auto; }
+  .rpt header.masthead { padding:40px 0 22px; border-bottom:2px solid var(--ink); margin-bottom:6px; }
+  .rpt .kicker { font-size:12px; letter-spacing:.14em; color:var(--ink-2); text-transform:uppercase; margin:0 0 10px; }
+  .rpt h1 { font-size:clamp(24px,4vw,34px); line-height:1.25; margin:0 0 10px; font-weight:800; letter-spacing:-.01em; text-wrap:balance; }
+  .rpt .stand { font-size:15px; color:var(--ink-2); max-width:68ch; margin:0 0 14px; }
+  .rpt .meta { font-size:12px; color:var(--muted); display:flex; gap:16px; flex-wrap:wrap; }
+  .rpt section { margin-top:44px; }
+  .rpt .eyebrow { font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--accent); margin:0 0 6px; }
+  .rpt h2 { font-size:20px; margin:0 0 6px; letter-spacing:-.005em; text-wrap:balance; }
+  .rpt h3 { font-size:15px; margin:0 0 6px; }
+  .rpt .sub { font-size:13.5px; color:var(--ink-2); margin:0 0 14px; max-width:72ch; }
+  .rpt .card { background:var(--surface); border:1px solid var(--ring); border-radius:10px; padding:18px 20px; }
+  .rpt .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
+  .rpt .tile { background:var(--surface); border:1px solid var(--ring); border-radius:10px; padding:13px 15px; }
+  .rpt .tile .lbl { font-size:12px; color:var(--ink-2); margin:0 0 4px; }
+  .rpt .tile .val { font-size:19px; font-weight:800; margin:0; letter-spacing:-.01em; }
+  .rpt .tile .d { font-size:12px; margin:3px 0 0; color:var(--muted); }
+  .rpt .tile .val.pos { color:var(--up); } .rpt .tile .val.neg { color:var(--down); }
+  .rpt figure { margin:0; } .rpt figcaption { font-size:12px; color:var(--muted); margin-top:8px; }
+  .rpt .chartbox { overflow-x:auto; }
+  .rpt svg { width:100%; height:auto; display:block; } .rpt svg text { font-family:inherit; }
+  .rpt .axis-t { font-size:11px; fill:var(--muted); font-variant-numeric:tabular-nums; }
+  .rpt .lab-t { font-size:12px; fill:var(--ink-2); }
+  .rpt .val-t { font-size:12px; font-weight:700; fill:var(--ink); font-variant-numeric:tabular-nums; }
+  .rpt .legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:12.5px; color:var(--ink-2); }
+  .rpt .legend span::before { content:""; display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; background:var(--c); }
+  .rpt table { border-collapse:collapse; width:100%; font-size:13px; }
+  .rpt th { text-align:left; font-size:11.5px; color:var(--ink-2); font-weight:600; border-bottom:1px solid var(--axis); padding:7px 9px; white-space:nowrap; }
+  .rpt td { border-bottom:1px solid var(--grid); padding:8px 9px; vertical-align:top; }
+  .rpt td.num { font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  .rpt .b { display:inline-block; font-size:10px; font-weight:700; padding:1px 6px; border-radius:99px; margin-left:4px; vertical-align:1px; }
+  .rpt .b.act { background:var(--accent); color:#fff; }
+  .rpt .b.gui { border:1px solid var(--accent); color:var(--accent); }
+  .rpt .b.con { border:1px solid var(--muted); color:var(--muted); }
+  .rpt .pill { display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:99px; border:1px solid var(--ring); white-space:nowrap; }
+  .rpt .pill.hi { background:var(--accent); color:#fff; border-color:transparent; }
+  .rpt .pill.neg { color:var(--down); border-color:var(--down); }
+  .rpt .pill.pos { color:var(--up); border-color:var(--up); }
+  .rpt .flow { display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; }
+  .rpt .fnode { flex:1 1 130px; background:var(--surface); border:1px solid var(--ring); border-radius:8px; padding:10px 12px; font-size:12.5px; position:relative; }
+  .rpt .fnode strong { display:block; font-size:13px; margin-bottom:3px; }
+  .rpt .fnode .co { color:var(--accent); font-weight:700; font-variant-numeric:tabular-nums; }
+  .rpt .duo { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:12px; }
+  .rpt .verdict { border-left:4px solid var(--accent); }
+  .rpt .verdict p { margin:6px 0; font-size:14px; }
+  .rpt .warnbox { border-left:4px solid var(--bear); }
+  .rpt ul.tight { margin:6px 0; padding-left:20px; font-size:13.5px; }
+  .rpt ul.tight li { margin:4px 0; }
+  .rpt .foot { margin-top:52px; padding-top:16px; border-top:1px solid var(--axis); font-size:12px; color:var(--muted); }
+  .rpt .qa { font-size:13.5px; }
+  .rpt .qa dt { font-weight:700; margin-top:10px; }
+  .rpt .qa dd { margin:2px 0 0 0; color:var(--ink-2); }
+</style>
+
+<div class="rpt"><div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">AI CapEx × 메모리 반도체 사이클 프로젝트 · 최종 리포트 v1</p>
+  <h1>빅테크의 돈은 어디까지 가는가 —<br>Micron·SanDisk 투자전략</h1>
+  <p class="stand">거시경제 → 빅테크 CapEx → AI 인프라 → 메모리 수요 → 실적 → 밸류에이션 → 적정주가로 이어지는 13단계 연결고리를 정량 검증했다. 가설을 증명하려 하지 않았고, 긍정·부정 근거를 모두 실었다.</p>
+  <p class="meta"><span>데이터 기준: 2026-07-22~23 (ET)</span><span>주가 기준: MU $970 · SNDK $1,599 (7/22 종가)</span><span>8개 도메인 에이전트 · 40여 회 조사 종합</span></p>
+</header>
+
+<section>
+  <p class="eyebrow">1 · EXECUTIVE SUMMARY</p>
+  <h2>일곱 가지 질문, 일곱 가지 답</h2>
+  <dl class="qa card">
+    <dt>현재 거시환경은 AI 투자를 지지하는가?</dt><dd>조건부 중립 — 물가·고용 둔화(비둘기)와 유가 $94·10년물 4.63%·Warsh 매파 리스크(매)가 상쇄. 조달비용은 상승 중.</dd>
+    <dt>AI CapEx는 언제까지 지속될 가능성이 높은가?</dt><dd><strong>2027년까지는 지속 가능성 높음(주관 확률 75~80%)</strong> — 발언·자금·계약 3박자 확인. 2028년은 견해 분열(MS $1.4조 vs UBS +6%).</dd>
+    <dt>2027년에도 지속되는가?</dt><dd>그렇다고 볼 근거가 우세 — Amazon은 계약상 이행 의무(OpenAI 2GW·Anthropic 5GW), Alphabet은 $84.75B 선조달, Oracle RPO $638B. 약한 고리는 Meta("감액 옵션" 언급 유일).</dd>
+    <dt>2028년까지 지속되는가?</dt><dd>불확실 — 신용시장 소화력(커버리지 5배→2배)과 전력 병목이 상단을 결정. 절대액 증가에는 이견이 적고, 쟁점은 증가율.</dd>
+    <dt>Micron vs SanDisk, 어느 쪽이 유리한가?</dt><dd><strong>위험 대비 기대수익은 Micron 우위</strong> — DRAM 부족은 장기화 전망인 반면 NAND는 2027년 하반기 완화 전환 전망(TrendForce 7/21). 상세는 12장.</dd>
+    <dt>현재 주가의 상승 여력은?</dt><dd>목표가 컨센 대비 MU +54%, SNDK +34%. 단 이 갭 자체가 "시장이 컨센 EPS를 안 믿는다"는 사이클 디스카운트다.</dd>
+    <dt>가장 큰 리스크는?</dt><dd>① 시장의 반응 체제 변화(CAPEX 상향에도 매도 — 7월에 2회 확인) ② 메모리 가격의 2차 미분(3Q26 모멘텀 둔화 개시) ③ AI 부채의 신용 이벤트.</dd>
+  </dl>
+</section>
+
+<section>
+  <p class="eyebrow">2 · 투자 가설</p>
+  <h2>가설과 반(反)가설</h2>
+  <div class="duo">
+    <div class="card"><h3 style="color:var(--up)">가설 (Bull thesis)</h3>
+      <p class="sub" style="margin:0">빅테크 AI CapEx 지속 → 메모리 수요 증가 + 공급 제약 → 가격·수익성 개선 → MU·SNDK 실적 급증 → 주가에 미반영 시 상승 여력.</p></div>
+    <div class="card warnbox"><h3 style="color:var(--down)">반가설 (Bear thesis)</h3>
+      <p class="sub" style="margin:0">CapEx 효율성 하락·AI ROI 악화·과잉투자 판정 → CapEx 둔화 → 사이클 정점. 특히 명목 CapEx 증가의 상당분이 "메모리 가격 그 자체"라는 순환성이 약점.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">3 · 거시경제</p>
+  <h2>지표가 아니라 전달 경로 — 매크로는 CapEx에 어떻게 닿는가</h2>
+  <div class="tiles">
+    <div class="tile"><p class="lbl">10년물 금리</p><p class="val neg">4.63%</p><p class="d">5월 중순 이후 최고 — 성장주 할인율 부담</p></div>
+    <div class="tile"><p class="lbl">6월 CPI</p><p class="val pos">3.5%</p><p class="d">예상 3.8% 하회, 코어 2.6%</p></div>
+    <div class="tile"><p class="lbl">유가 (브렌트)</p><p class="val neg">$94</p><p class="d">이란발 +3.4% — 향후 물가지표 리스크</p></div>
+    <div class="tile"><p class="lbl">FOMC 7/29</p><p class="val">동결 75~89%</p><p class="d">점도표 18명 중 9명 연내 인상 지지</p></div>
+    <div class="tile"><p class="lbl">고용 (6월 NFP)</p><p class="val">+5.7만</p><p class="d">예상 11.5만 대폭 하회 — 인상 논거 약화</p></div>
+    <div class="tile"><p class="lbl">회사채 커버리지</p><p class="val neg">5배→2배</p><p class="d">하이퍼스케일러 채권 수요 급랭 (Apollo)</p></div>
+  </div>
+  <p class="sub" style="margin-top:14px"><strong>전달 경로 판정:</strong> ① 금리→CapEx: 빅테크는 현금·계약 기반이라 단기 탄력 낮음, 단 <strong>조달의존도가 높아진 2027년부터는 금리가 실질 제약</strong> (Amazon·Meta FCF 마이너스 전환). ② 금리→밸류에이션: 10년물 4.6%대는 성장주 멀티플 압축 요인으로 이미 작동 중. ③ 유가→물가→Fed: 6월 CPI 둔화는 유가 급등 "이전" 데이터 — 8월 지표부터 재점화 리스크. <strong>종합: 거시환경 중립, CapEx 지속성에 중립~부정(조달 채널), 메모리 수요에 중립. 12개월 중립 / 24개월 불확실.</strong></p>
+</section>
+
+<section>
+  <p class="eyebrow">4 · 빅테크 CAPEX</p>
+  <h2>2022~2027: 5사 합산 $156B → $1.1조으로 7배</h2>
+  <div class="card chartbox">
+    <figure>
+      <svg viewBox="0 0 720 320" role="img" aria-label="빅테크 5사 연간 CapEx 누적 막대: 2022년 156빌리언 달러에서 2027년 컨센서스 약 1093빌리언 달러까지">
+        <g stroke="var(--grid)" stroke-width="1">
+          <line x1="60" y1="225" x2="690" y2="225"/><line x1="60" y1="170" x2="690" y2="170"/>
+          <line x1="60" y1="115" x2="690" y2="115"/><line x1="60" y1="60" x2="690" y2="60"/>
+        </g>
+        <line x1="60" y1="280" x2="690" y2="280" stroke="var(--axis)"/>
+        <g class="axis-t" text-anchor="end">
+          <text x="54" y="284">0</text><text x="54" y="229">$250B</text><text x="54" y="174">$500B</text>
+          <text x="54" y="119">$750B</text><text x="54" y="64">$1,000B</text>
+        </g>
+        <!-- 2022 -->
+        <g stroke="var(--surface)" stroke-width="1">
+          <rect x="73" y="273.1" width="64" height="6.9" fill="var(--s-googl)"/><rect x="73" y="267.8" width="64" height="5.3" fill="var(--s-msft)"/>
+          <rect x="73" y="253.8" width="64" height="14" fill="var(--s-amzn)"/><rect x="73" y="246.8" width="64" height="7" fill="var(--s-meta)"/>
+          <rect x="73" y="245.8" width="64" height="1" fill="var(--s-orcl)"/>
+        </g>
+        <!-- 2023 -->
+        <g stroke="var(--surface)" stroke-width="1">
+          <rect x="177" y="272.9" width="64" height="7.1" fill="var(--s-googl)"/><rect x="177" y="266.7" width="64" height="6.2" fill="var(--s-msft)"/>
+          <rect x="177" y="255.1" width="64" height="11.6" fill="var(--s-amzn)"/><rect x="177" y="248.9" width="64" height="6.2" fill="var(--s-meta)"/>
+          <rect x="177" y="247" width="64" height="1.9" fill="var(--s-orcl)"/>
+        </g>
+        <!-- 2024 -->
+        <g stroke="var(--surface)" stroke-width="1">
+          <rect x="281" y="268.4" width="64" height="11.6" fill="var(--s-googl)"/><rect x="281" y="258.6" width="64" height="9.8" fill="var(--s-msft)"/>
+          <rect x="281" y="240.3" width="64" height="18.3" fill="var(--s-amzn)"/><rect x="281" y="231.7" width="64" height="8.6" fill="var(--s-meta)"/>
+          <rect x="281" y="230.2" width="64" height="1.5" fill="var(--s-orcl)"/>
+        </g>
+        <!-- 2025 -->
+        <g stroke="var(--surface)" stroke-width="1">
+          <rect x="385" y="259.9" width="64" height="20.1" fill="var(--s-googl)"/><rect x="385" y="245.7" width="64" height="14.2" fill="var(--s-msft)"/>
+          <rect x="385" y="216.7" width="64" height="29" fill="var(--s-amzn)"/><rect x="385" y="200.8" width="64" height="15.9" fill="var(--s-meta)"/>
+          <rect x="385" y="196.1" width="64" height="4.7" fill="var(--s-orcl)"/>
+        </g>
+        <!-- 2026 -->
+        <g stroke="var(--surface)" stroke-width="1">
+          <rect x="489" y="236" width="64" height="44" fill="var(--s-googl)"/><rect x="489" y="194.2" width="64" height="41.8" fill="var(--s-msft)"/>
+          <rect x="489" y="150.2" width="64" height="44" fill="var(--s-amzn)"/><rect x="489" y="120.5" width="64" height="29.7" fill="var(--s-meta)"/>
+          <rect x="489" y="108.2" width="64" height="12.3" fill="var(--s-orcl)"/>
+        </g>
+        <!-- 2027 (consensus, lighter) -->
+        <g stroke="var(--surface)" stroke-width="1" opacity=".78">
+          <rect x="593" y="222.8" width="64" height="57.2" fill="var(--s-googl)"/><rect x="593" y="163.4" width="64" height="59.4" fill="var(--s-msft)"/>
+          <rect x="593" y="100" width="64" height="63.4" fill="var(--s-amzn)"/><rect x="593" y="54.9" width="64" height="45.1" fill="var(--s-meta)"/>
+          <rect x="593" y="39.5" width="64" height="15.4" fill="var(--s-orcl)"/>
+        </g>
+        <g class="val-t" text-anchor="middle">
+          <text x="105" y="239">156</text><text x="209" y="240">150</text><text x="313" y="223">226</text>
+          <text x="417" y="189">381</text><text x="521" y="101">~781</text><text x="625" y="33">~1,093</text>
+        </g>
+        <g class="axis-t" text-anchor="middle">
+          <text x="105" y="298">2022</text><text x="209" y="298">2023</text><text x="313" y="298">2024</text>
+          <text x="417" y="298">2025</text><text x="521" y="298">2026 가이던스</text><text x="625" y="298">2027 컨센·추정</text>
+        </g>
+      </svg>
+      <div class="legend">
+        <span style="--c:var(--s-googl)">Alphabet</span><span style="--c:var(--s-msft)">Microsoft</span>
+        <span style="--c:var(--s-amzn)">Amazon</span><span style="--c:var(--s-meta)">Meta</span><span style="--c:var(--s-orcl)">Oracle</span>
+      </div>
+      <figcaption>단위 $B. 2022~25 실제값(10-K/8-K), 2026 가이던스 중간값, 2027은 개별 하우스 추정 조합(Evercore·Wolfe·Citi). MSFT는 회계연도·PP&amp;E 기준(2026부터 리스 포함 가이던스라 시계열 단절 있음 — 표 참조).</figcaption>
+    </figure>
+  </div>
+  <div style="overflow-x:auto; margin-top:12px">
+    <table>
+      <thead><tr><th>$B</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>2027</th><th>CapEx/OCF (2025)</th></tr></thead>
+      <tbody>
+        <tr><td>Alphabet</td><td class="num">31.5<span class="b act">실제</span></td><td class="num">32.3<span class="b act">실제</span></td><td class="num">52.5<span class="b act">실제</span></td><td class="num">91.4<span class="b act">실제</span></td><td class="num">195–205<span class="b gui">가이던스</span></td><td class="num">257–262<span class="b con">컨센</span></td><td class="num">55%</td></tr>
+        <tr><td>Microsoft (FY)</td><td class="num">23.9<span class="b act">실제</span></td><td class="num">28.1<span class="b act">실제</span></td><td class="num">44.5<span class="b act">실제</span></td><td class="num">64.6<span class="b act">실제</span></td><td class="num">~190<span class="b gui">가이던스</span></td><td class="num">~270<span class="b con">Wolfe</span></td><td class="num">47~65%</td></tr>
+        <tr><td>Amazon</td><td class="num">63.6<span class="b act">실제</span></td><td class="num">52.7<span class="b act">실제</span></td><td class="num">83.0<span class="b act">실제</span></td><td class="num">131.8<span class="b act">실제</span></td><td class="num">~200<span class="b gui">가이던스</span></td><td class="num">~288<span class="b con">Citi</span></td><td class="num">94%</td></tr>
+        <tr><td>Meta</td><td class="num">32.0<span class="b act">실제</span></td><td class="num">28.1<span class="b act">실제</span></td><td class="num">39.2<span class="b act">실제</span></td><td class="num">72.2<span class="b act">실제</span></td><td class="num">125–145<span class="b gui">가이던스</span></td><td class="num">~205<span class="b con">Citi</span></td><td class="num">62%</td></tr>
+        <tr><td>Oracle (FY)</td><td class="num">4.5<span class="b act">실제</span></td><td class="num">8.7<span class="b act">실제</span></td><td class="num">6.9<span class="b act">실제</span></td><td class="num">21.2<span class="b act">실제</span></td><td class="num">55.7<span class="b act">실제</span></td><td class="num">~70(순액)<span class="b gui">가이던스</span></td><td class="num">102→174%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:10px">읽는 법: CapEx/OCF가 100%를 넘으면 버는 현금으로 투자를 못 댄다는 뜻. Amazon 94%, Oracle 174%(FY26, FCF −$23.7B 확정) — 조달 의존이 이미 현실. Oracle RPO는 $638B(+363% YoY, OpenAI $300B 포함)로 "수주는 폭발, 현금은 적자"의 극단 사례. 참고: CoreWeave(네오클라우드)는 2026 CapEx $31~35B를 부채 $22.7B로 조달 중 — 밸류체인의 가장 약한 신용 고리.</p>
+</section>
+
+<section>
+  <p class="eyebrow">5 · CAPEX 구성</p>
+  <h2>그 돈의 절반이 메모리로 간다는 전망</h2>
+  <div class="card chartbox">
+    <figure>
+      <svg viewBox="0 0 720 190" role="img" aria-label="하이퍼스케일러 CapEx 중 메모리 비중: 2023~24년 8%, 2026년 약 32%, 2027년 최대 48%">
+        <g class="lab-t" text-anchor="end"><text x="150" y="46">2023~24</text><text x="150" y="101">2026</text><text x="150" y="156">2027 (CLSA)</text></g>
+        <rect x="160" y="30" width="42" height="24" rx="4" fill="var(--ramp-a)"/>
+        <rect x="160" y="85" width="170" height="24" rx="4" fill="var(--ramp-b)"/>
+        <rect x="160" y="140" width="254" height="24" rx="4" fill="var(--ramp-c)"/>
+        <g class="val-t"><text x="210" y="47">~8%</text><text x="338" y="102">30~35%</text><text x="422" y="157">최대 48%</text></g>
+        <text class="axis-t" x="430" y="102">MSFT는 $25B를 메모리 비용으로 공식 귀속</text>
+      </svg>
+      <figcaption>출처: SemiAnalysis·CLSA(2차 인용), Microsoft 실적콜(4/29). 구성 참고: Alphabet 서버 ~60%/데이터센터·네트워크 ~40%, MSFT "2/3가 GPU·CPU 등 단수명 자산".</figcaption>
+    </figure>
+  </div>
+  <p class="sub" style="margin-top:10px"><strong>⚠ 이 차트의 함정(핵심 캐비앗):</strong> 비중 급등의 상당분은 비트가 아니라 <strong>가격</strong>이다. 2026년 메모리 비트 공급은 DRAM +16%/NAND +17%뿐인데 달러 비중이 4배가 된 것은 ASP 급등 때문. 즉 CapEx가 유지돼도 메모리 가격이 꺾이면 이 비중(=메모리 기업 매출)은 급감할 수 있다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">6 · AI 인프라 브리지</p>
+  <h2>CapEx 1달러는 어떻게 메모리 수요가 되는가</h2>
+  <div class="flow">
+    <div class="fnode"><strong>CapEx</strong>2026년 5사 <span class="co">~$781B</span><br>2027 컨센 <span class="co">~$1.1조</span></div>
+    <div class="fnode"><strong>환산 계수</strong>$100B당 메모리 구매<br><span class="co">$30B</span>(2026) → <span class="co">~$48B</span>(2027)</div>
+    <div class="fnode"><strong>AI 서버</strong>출하 <span class="co">+28.3%</span>(2026)<br>대수는 전체의 17%뿐</div>
+    <div class="fnode"><strong>대당 강도</strong>DRAM <span class="co">최대 8배</span>(vs 일반 서버)<br>DRAM 소비의 20%+ 차지</div>
+    <div class="fnode"><strong>GPU→HBM</strong>H100 80GB → Rubin Ultra <span class="co">384GB</span> (4.8배)<br>HBM 비트 <span class="co">+70%</span>(2026)</div>
+    <div class="fnode"><strong>스토리지</strong>니어라인 HDD 리드타임 52주+ → QLC eSSD 대체<br>eSSD 매출 <span class="co">+86% QoQ</span>(1Q26)</div>
+  </div>
+  <p class="sub" style="margin-top:12px">수급 갭: DRAM 공급 +16% vs 수요 20%대 초중반(<strong>4~8%p 부족</strong>) · NAND <strong>4~5% 부족</strong> — 단 <strong>NAND는 2027년 하반기 완화 전환 전망</strong>(TrendForce 7/21)이며 DRAM 부족은 장기화 관측. 이 비대칭이 12장의 MU 우위 판단의 핵심 근거다. (모든 계수는 TrendForce/IDC/Micron 공시 기반, 세부 가정은 research/STATUS.md 참조)</p>
+</section>
+
+<section>
+  <p class="eyebrow">7 · 메모리 수요·공급·가격</p>
+  <h2>제품군별 상황판</h2>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>제품군</th><th>2026 수급</th><th>가격 (확인치)</th><th>2027~28 전망</th><th>판정</th></tr></thead>
+      <tbody>
+        <tr><td><strong>DRAM (범용)</strong></td><td>공급 +16% &lt; 수요 20%대 = 부족</td><td class="num">1Q26 +81~98% QoQ → 3Q26 +13~18%로 둔화</td><td>부족 장기화 관측 (HBM 웨이퍼 잠식 22%→30%)</td><td><span class="pill pos">타이트 지속</span></td></tr>
+        <tr><td><strong>HBM</strong></td><td>2026년분 완판, 비트 +70%</td><td class="num">2026 계약 +20% 안팎</td><td>2027 계약가 "배수 단위" 급등 가능성 (TrendForce)</td><td><span class="pill pos">최강 타이트</span></td></tr>
+        <tr><td><strong>NAND</strong></td><td>4~5% 공급 부족</td><td class="num">1H26 누적 +100%+ → 3Q26 +10~15%로 둔화</td><td><strong>2H27 공급&gt;수요 전환 전망</strong> — 완화 리스크</td><td><span class="pill">타이트 → 완화</span></td></tr>
+        <tr><td><strong>eSSD</strong></td><td>HDD 대체 수요 폭발 (상위5사 매출 +86% QoQ)</td><td class="num">1Q26 계약가 ~+80%</td><td>QLC가 2027 초 TLC 추월 전망</td><td><span class="pill pos">구조적 성장</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:10px">공통 관찰: <strong>가격 상승의 "2차 미분"이 3Q26부터 꺾이기 시작했다.</strong> 부족 자체는 지속되지만 개선 속도가 둔화 — 사이클 주식은 통상 이 시점부터 실적보다 먼저 멀티플이 반응한다 (2000년 텔레콤에서 장비주가 CAPEX 정점 6~9개월 전에 꺾인 것과 같은 메커니즘).</p>
+</section>
+
+<section>
+  <p class="eyebrow">8 · MICRON</p>
+  <h2>FY26 ~$129B의 회사가 된 뒤의 질문: 유지되는가</h2>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th></th><th>FY2023 (저점)</th><th>FY2025</th><th>FY2026E</th><th>FY2027 컨센</th><th>FY2028</th></tr></thead>
+      <tbody>
+        <tr><td>매출</td><td class="num">$15.5B (−49%)</td><td class="num">$37.4B<span class="b act">실제</span></td><td class="num">~$129B<span class="b gui">가이던스 수용</span></td><td class="num">$250B설 미검증<span class="b con">단일출처</span></td><td class="num">컨센 미형성</td></tr>
+        <tr><td>EPS</td><td class="num" style="color:var(--down)">−$5.34 적자</td><td class="num">$8.29</td><td class="num">~$73</td><td class="num">$110~150<span class="b con">컨센</span> (리비전 급상향 중)</td><td class="num">Cantor 불케이스 $200</td></tr>
+        <tr><td>핵심 지표</td><td colspan="4" style="font-size:12.5px">FQ3 GM 84.9% → FQ4 가이드 ~86% (마진 아직 상승 중) · 선수금 $22B · 취소불가 SCA 16건 · 고객계약 ~$100B · HBM 점유율 ~21%</td><td class="num">FY27 CAPEX mid-$40B+</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:10px">강세 무효화 트리거(강세론자 명시): ① 하이퍼스케일러 CAPEX 삭감이 take-or-pay 계약 무력화 ② 차세대 NVIDIA HBM 퀄을 삼성/SK하이닉스에 상실. 바이백: 잔여 한도 $21.6억뿐, <strong>CHIPS 제약 만료(2026-12-09) 후 신규 승인이 잠재 촉매</strong> (UBS: 2028년까지 발행주식 40% 매입 가능 시나리오 — 회사 계획 아님).</p>
+</section>
+
+<section>
+  <p class="eyebrow">9 · SANDISK</p>
+  <h2>이 종목을 사는 것은 "LTA 구조론"을 사는 것</h2>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th></th><th>FY2023 (저점)</th><th>FY2025</th><th>FY2026E</th><th>FY2027 컨센</th><th>FY2028</th></tr></thead>
+      <tbody>
+        <tr><td>매출</td><td class="num">$6.1B</td><td class="num">$7.4B<span class="b act">실제</span></td><td class="num">~$19–20B</td><td class="num">$41→45B<span class="b con">상향 리비전 중</span></td><td class="num">컨센 미형성</td></tr>
+        <tr><td>영업이익/EPS</td><td class="num" style="color:var(--down)">영업손실 −$2.0B</td><td class="num">GAAP 영업익 $18M (FQ4)</td><td class="num">EPS ~$61–65</td><td class="num">EPS ~$177<span class="b con">컨센</span></td><td class="num">Bernstein 베이스 $272</td></tr>
+        <tr><td>핵심 지표</td><td colspan="4" style="font-size:12.5px">FQ4 가이드 GM 79~81%/EPS $30~33 (컨센은 이미 상단 초과 $34.15) · NBM 백로그 $42B+보증 $11B · FY27 비트 1/3+ 락인(50% 목표) · 순현금 · $6B 바이백 승인</td><td class="num">8/5 실적 발표</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sub" style="margin-top:10px"><strong>Bernstein의 결정적 계산</strong>: 2010년급 가격 붕괴가 와도 산출량 60%가 LTA(고정가, 플로어 ~$0.29/GB) 커버면 FY27 EPS <strong>$214</strong>, 무보호면 <strong>$81</strong> — 같은 업황에서 2.6배 격차. 리스크: NAND 수급이 2027년 하반기 완화 전환 전망이라, LTA 커버리지(8/5 확인)가 MU보다 더 절박한 변수다. HBF(High Bandwidth Flash)는 2030년 전후 본격화 — FY27~28 추정엔 미반영(순수 옵션 가치).</p>
+</section>
+
+<section>
+  <p class="eyebrow">10 · 시나리오</p>
+  <h2>Bull / Base / Bear — 확률은 주관적 추정</h2>
+  <div class="card chartbox">
+    <figure>
+      <svg viewBox="0 0 720 170" role="img" aria-label="시나리오 확률: 베이스 45퍼센트, 불 30퍼센트, 베어 25퍼센트">
+        <g class="lab-t" text-anchor="end">
+          <text x="205" y="42">Base · CapEx 지속+증가율 둔화</text>
+          <text x="205" y="92">Bull · 2028까지 고성장 지속</text>
+          <text x="205" y="142">Bear · ROI 심판+공급 정상화</text>
+        </g>
+        <rect x="215" y="25" width="445" height="24" rx="4" fill="var(--ink-2)" opacity=".55"/>
+        <rect x="215" y="75" width="297" height="24" rx="4" fill="var(--accent)"/>
+        <rect x="215" y="125" width="247" height="24" rx="4" fill="var(--bear)"/>
+        <g class="val-t"><text x="668" y="42">45%</text><text x="520" y="92">30%</text><text x="470" y="142">25%</text></g>
+      </svg>
+    </figure>
+  </div>
+  <div style="overflow-x:auto; margin-top:12px">
+    <table>
+      <thead><tr><th>시나리오</th><th>조건</th><th>MU 결과</th><th>SNDK 결과</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bull 30%</strong></td><td>2027~28 CapEx $1.1~1.4조 실현, HBM 2027 계약가 급등, 공급 규율 유지</td><td class="num">EPS $150~200 → 적정가 $2,000~2,200</td><td class="num">EPS $200~272 → $2,200~3,000</td></tr>
+        <tr><td><strong>Base 45%</strong></td><td>CapEx 지속하되 증가율 둔화(+25%대), 가격 상승 모멘텀 완만화</td><td class="num">EPS $110~150 → $1,490~1,570</td><td class="num">EPS ~$177 → $1,900~2,150</td></tr>
+        <tr><td><strong>Bear 25%</strong></td><td>ROI 심판 확산, 2H27 NAND 완화+2028 DRAM 캐파 가동, 신용 이벤트</td><td class="num">EPS $60~70 → $567~750</td><td class="num">EPS $81~120 → $1,000~1,300</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">11 · 현재 주가 평가</p>
+  <h2>주가는 어느 시나리오를 가격에 넣고 있나</h2>
+  <div class="duo">
+    <div class="card chartbox">
+      <figure>
+        <svg viewBox="0 0 360 190" role="img" aria-label="마이크론 시나리오별 적정주가 밴드와 현재가 970달러">
+          <text class="val-t" x="14" y="20">Micron — 현재가 $970</text>
+          <g class="lab-t"><text x="14" y="56">Bear</text><text x="14" y="96">Base</text><text x="14" y="136">Bull</text></g>
+          <rect x="73" y="44" width="44" height="14" rx="4" fill="var(--bear)"/>
+          <rect x="292" y="84" width="19" height="14" rx="4" fill="var(--ink-2)" opacity=".55"/>
+          <rect x="298" y="124" width="48" height="14" rx="4" fill="var(--accent)" opacity="0"/>
+          <rect x="298" y="124" width="48" height="14" rx="4" fill="var(--accent)" transform="translate(-32 0)"/>
+          <line x1="188" y1="34" x2="188" y2="152" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
+          <text class="axis-t" x="188" y="168" text-anchor="middle">$970</text>
+          <g class="axis-t"><text x="73" y="72">567–750</text><text x="255" y="112">1,492–1,569</text><text x="255" y="152">2,000–2,200</text></g>
+        </svg>
+        <figcaption>x축 $500~2,300 스케일. 밴드=시나리오별 목표가 범위.</figcaption>
+      </figure>
+    </div>
+    <div class="card chartbox">
+      <figure>
+        <svg viewBox="0 0 360 190" role="img" aria-label="샌디스크 시나리오별 적정주가 밴드와 현재가 1599달러">
+          <text class="val-t" x="14" y="20">SanDisk — 현재가 $1,599</text>
+          <g class="lab-t"><text x="14" y="56">Bear</text><text x="14" y="96">Base</text><text x="14" y="136">Bull</text></g>
+          <rect x="74" y="44" width="43" height="14" rx="4" fill="var(--bear)"/>
+          <rect x="203" y="84" width="36" height="14" rx="4" fill="var(--ink-2)" opacity=".55"/>
+          <rect x="246" y="124" width="100" height="14" rx="4" fill="var(--accent)"/>
+          <line x1="160" y1="34" x2="160" y2="152" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>
+          <text class="axis-t" x="160" y="168" text-anchor="middle">$1,599</text>
+          <g class="axis-t"><text x="74" y="72">1,000–1,300</text><text x="203" y="112">1,900–2,150</text><text x="246" y="152">2,200–3,000</text></g>
+        </svg>
+        <figcaption>x축 $900~3,100 스케일.</figcaption>
+      </figure>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:12px"><strong>판독:</strong> 두 종목 모두 현재가가 <strong>Bear 상단과 Base 하단 사이</strong>에 있다. 즉 시장은 Base 시나리오조차 완전히 가격에 넣지 않았다 — trailing PE 19~25배 vs forward 6~9배의 간극이 그 증거(사이클 디스카운트). MU $970은 "FY27 컨센 달성+FY28 비붕괴"를, SNDK $1,599는 "지속가능 EPS $160~200"을 내재. 상승 여력이 실현되려면 필요한 것은 이익 성장이 아니라 <strong>이익 지속성에 대한 신뢰 회복</strong>이고, 그 촉매는 7/29~30 CapEx 확인과 8/5 SNDK LTA 공시다.</p>
+</section>
+
+<section>
+  <p class="eyebrow">12 · 투자 전략 (Portfolio Manager)</p>
+  <h2>조건부 전략 — 가격이 아니라 조건이 트리거다</h2>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th></th><th>Micron</th><th>SanDisk</th></tr></thead>
+      <tbody>
+        <tr><td>투자 의견</td><td><span class="pill hi">분할매수</span></td><td><span class="pill">소규모 분할매수 + 8/5 확인</span></td></tr>
+        <tr><td>투자 기간</td><td colspan="2">중기(수개월) — 2027년 상반기까지 사이클 지표 동반 모니터링 전제</td></tr>
+        <tr><td>1차 분할매수 구간</td><td class="num">$900~970 (붕괴됐던 $900의 지지 전환 확인 구간)</td><td class="num">$1,450~1,550 ($1,500 지지 전환 확인 구간)</td></tr>
+        <tr><td>추가매수 조건</td><td colspan="2">7/29~30 MSFT·META·AMZN CapEx 확인 + 시장 반응이 "상향=매도" 체제에서 벗어날 때 / SK하이닉스(7/29)·삼성(7/30) HBM 가이던스 견조</td></tr>
+        <tr><td>종목별 추가 트리거</td><td class="num">12/9 CHIPS 제약 만료 후 신규 바이백 승인 규모</td><td class="num">8/5 신규 LTA 공시·FY27 비트 락인 50% 진전</td></tr>
+        <tr><td>비중축소 조건</td><td colspan="2">① Meta식 "감액 옵션" 언어가 2사 이상으로 확산 ② AI 채권 커버리지 2배 미만 고착·스프레드 급확대 ③ 메모리 계약가 상승률이 2분기 연속 예상 하회(2차 미분 악화 가속)</td></tr>
+        <tr><td>적정 비중</td><td colspan="2">합산 핵심 포지션 한도(포트폴리오 10~20%) 내에서 시작은 하단, 조건 충족 시 단계 확대. <strong>MU:SNDK ≈ 2:1</strong> (NAND 2H27 완화 vs DRAM 부족 장기화의 비대칭 반영)</td></tr>
+        <tr><td>상대 선호</td><td colspan="2"><strong>1위 Micron</strong> — DRAM/HBM 부족의 지속 기간이 NAND보다 길고, HBM 세대 전환(칩당 4.8배)이라는 구조적 비트 수요 승수 보유. <strong>2위 SanDisk</strong> — 상승 여력의 절대치는 크나(불케이스 $3,000) 그 실현이 LTA 커버리지라는 단일 변수에 집중돼 리스크가 이항(binary)적.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card warnbox" style="margin-top:12px">
+    <h3>레버리지 상품(MUU/SNXX) 관련 경고</h3>
+    <p class="sub" style="margin:0">이 시장은 일간 ±5~12% 변동이 반복되는 구간이다(7월 실측). 2배 레버리지 단일종목 ETF는 변동성 감쇠로 기초자산 회복 시에도 원금 회복이 안 될 수 있다. 사용한다면 전체 포지션의 30~50% 이내, 나머지는 현물·분산 ETF 권장 — 직전 사이클(18억→6.7억)의 드로다운 상당분이 레버리지 구조에서 나왔다.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">13 · 무효화 조건</p>
+  <h2>이 리포트가 틀렸다고 판단해야 하는 순간들</h2>
+  <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>조건</th><th>현재 상태 (7/23)</th></tr></thead>
+      <tbody>
+        <tr><td>빅테크 CapEx 가이던스 하향/"지출 규율" 다수 발생</td><td><span class="pill pos">미발생</span> 오히려 GOOGL 상향. 단 Meta 언어 감시</td></tr>
+        <tr><td>시장의 "CAPEX 상향=매도" 체제 고착</td><td><span class="pill neg">경고등</span> 7월 2회 확인(TSMC·GOOGL) — 7/29가 판정일</td></tr>
+        <tr><td>AI 관련 매출 성장 둔화 (ROI 악화)</td><td><span class="pill pos">미발생</span> 클라우드 +82% 재가속, 백로그 $514B</td></tr>
+        <tr><td>신용 이벤트 (커버리지·스프레드)</td><td><span class="pill neg">경고등</span> 커버리지 5배→2배, CDS 바스켓 출시</td></tr>
+        <tr><td>메모리 가격 모멘텀 악화 가속</td><td><span class="pill">주의</span> 3Q26 둔화 개시 — 부족은 유지</td></tr>
+        <tr><td>NAND 공급과잉 조기 도래</td><td><span class="pill">주의</span> 2H27 완화 전망 공식화(TrendForce 7/21)</td></tr>
+        <tr><td>HBM 공급 급증 / NVIDIA 퀄 상실(MU)</td><td><span class="pill pos">미발생</span> 2026년분 완판, 2027 풀부킹</td></tr>
+        <tr><td>기업 가이던스 하향 (MU/SNDK)</td><td><span class="pill pos">미발생</span> 둘 다 상향 중</td></tr>
+        <tr><td>경기침체 / 금리 급등</td><td><span class="pill">주의</span> 고용 급랭 + 10Y 4.63% + 유가 $94</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">최종 결론</p>
+  <div class="card verdict">
+    <h2 style="margin-bottom:10px">CIO 판정</h2>
+    <p><strong>핵심 결론:</strong> 현재 데이터 기준 AI CapEx 투자는 <strong>2027년까지 지속 가능성이 높음</strong> (2028년은 불확실). 근거: 계약적 이행 의무(AMZN)·선조달(GOOGL)·수주잔고(ORCL $638B)의 실물 3박자. 반대 근거: 신용시장 냉각, 시장의 반응 체제 변화, 메모리 가격 2차 미분 둔화.</p>
+    <p><strong>거시환경:</strong> 중립 (12개월 중립 / 24개월 불확실)</p>
+    <p><strong>CapEx 전망:</strong> 2026 ~$781B(가이던스 기반) · 2027 $1.0~1.2조(컨센, 하방 위험은 증가율) · 2028 $1.2~1.4조 vs +6% 둔화론 병존</p>
+    <p><strong>Micron — 분할매수.</strong> 근거: ① DRAM/HBM 부족의 지속 기간 우위 + HBM 칩당 용량 4.8배 승수 ② 선수금 $22B·취소불가 계약의 하방 방어 ③ 12월 바이백 촉매. </p>
+    <p><strong>SanDisk — 소규모 분할매수(8/5 확인 후 확대).</strong> 근거: ① eSSD 구조적 성장(HDD 대체) ② Bernstein 다운사이드 보호 논리($214 vs $81) ③ 순현금+$6B 바이백. 유보: NAND 2H27 완화 전망.</p>
+    <p><strong>상대 선호:</strong> 1위 Micron, 2위 SanDisk — 비중 2:1 권장.</p>
+    <p><strong>최중요 이벤트:</strong> ① 7/29~30 MSFT·META·AMZN CapEx + SK하이닉스·삼성 실적 ② 8/5 SNDK 실적(LTA 커버리지) ③ 12/9 MU CHIPS 제약 만료(바이백)</p>
+    <p><strong>가설 유지 조건:</strong> ① 2027 CapEx 컨센의 추가 상향 지속 ② LTA/선수금 커버리지 확대 ③ 신용시장 소화력 회복</p>
+    <p><strong>무효화 조건:</strong> ① CapEx "지출 규율" 언어 2사+ 확산 ② 신용 이벤트 발생 ③ 계약가 상승률 2분기 연속 예상 하회</p>
+    <p><strong>최종 신뢰도: 58/100.</strong> 근거: 13단계 연결고리 중 1~8단계(거시→메모리 수요)는 복수 독립 소스로 정량 확인됐으나(신뢰도 높음), 9~12단계(실적→적정주가)는 급격한 리비전 국면의 컨센서스에 의존하고, 시나리오 확률은 주관적 추정이며, 시장의 반응 체제라는 비펀더멘털 변수가 단기 지배력을 갖고 있음. 확인된 지표 중 다수는 가설 지지, 2개(반응 체제·신용)는 경고 방향.</p>
+  </div>
+</section>
+
+<p class="foot">본 자료는 정보 제공 목적의 개인 리서치 보조 자료이며 투자 자문이 아닙니다. 투자 손익의 책임은 투자자 본인에게 있습니다. 모든 전망은 조건부이며, 확률은 통계적 확률이 아닌 현재 정보 기반의 주관적 추정입니다. 수치 출처: 각사 10-K/8-K/IR, TrendForce, IDC, SemiAnalysis/CLSA(2차 인용), CNBC/Bloomberg 보도 — 상세 출처는 레포 research/STATUS.md 및 조사 로그 참조. 일부 수치(FY27 매출 $250B설, MSFT 리스포함 과거치 등)는 미검증/확인불가로 본문에 명시. · 데이터 기준 2026-07-22~23 (ET)</p>
+
+</div></div>
