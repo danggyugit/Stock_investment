@@ -1,0 +1,419 @@
+<title>2026 하반기 미국 주식 투자전략 · 전략 A/B 포트폴리오</title>
+<style>
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9;
+  --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e;
+  --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+    --accent:#6b9fe8; --accent-soft:#22304a;
+    --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+    --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e;
+    --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+  --accent:#6b9fe8; --accent-soft:#22304a;
+  --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+  --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e;
+  --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32;
+}
+:root[data-theme="light"]{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9;
+  --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e;
+  --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.65; margin:0; padding:0 20px 80px;}
+main{max-width:920px; margin:0 auto;}
+h1{font-size:1.7rem; line-height:1.35; letter-spacing:-.01em; text-wrap:balance; margin:.2em 0 .3em;}
+h2{font-size:1.22rem; margin:2.6em 0 .6em; padding-top:1.2em; border-top:1px solid var(--line); letter-spacing:-.01em;}
+h2 .no{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:.45em; font-size:.85em;}
+h3{font-size:1.02rem; margin:1.6em 0 .4em;}
+p{margin:.5em 0;}
+.small{font-size:.84rem; color:var(--ink2);}
+.eyebrow{font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-top:2.2em;}
+header{padding:2.4em 0 1.2em;}
+.meta{color:var(--ink2); font-size:.88rem;}
+table{border-collapse:collapse; width:100%; font-size:.87rem; font-variant-numeric:tabular-nums;}
+th{font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink2); text-align:left; padding:8px 10px; border-bottom:2px solid var(--line); white-space:nowrap;}
+td{padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+.tw{overflow-x:auto; margin:1em 0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:6px 10px;}
+.num{text-align:right; white-space:nowrap;}
+.tag{display:inline-block; font-size:.72rem; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.good{background:var(--good-bg); color:var(--good);}
+.tag.warn{background:var(--warn-bg); color:var(--warn);}
+.tag.crit{background:var(--crit-bg); color:var(--crit);}
+.tag.neut{background:var(--neut-bg); color:var(--ink2);}
+.fact{color:var(--accent); font-weight:700; font-size:.78rem;}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 22px; margin:1em 0;}
+.card h3{margin-top:0;}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:1em 0;}
+.kpi{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px;}
+.kpi .v{font-size:1.35rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.01em;}
+.kpi .l{font-size:.78rem; color:var(--ink2); margin-top:2px;}
+.bar-row{display:flex; align-items:center; gap:10px; margin:7px 0; font-size:.85rem;}
+.bar-row .lbl{flex:0 0 172px; text-align:right; color:var(--ink);}
+.bar-row .trk{flex:1; height:16px; background:var(--neut-bg); border-radius:4px; overflow:hidden;}
+.bar-row .fill{height:100%; border-radius:4px;}
+.bar-row .val{flex:0 0 40px; font-variant-numeric:tabular-nums; font-weight:700;}
+.stack{display:flex; height:34px; border-radius:8px; overflow:hidden; margin:.7em 0 .3em; border:1px solid var(--line);}
+.stack div{display:flex; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden;}
+.legend{display:flex; flex-wrap:wrap; gap:12px; font-size:.78rem; color:var(--ink2); margin:.4em 0 1em;}
+.legend span::before{content:""; display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; background:var(--sw);}
+.verdict{border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:1.2em 0;}
+.verdict h3{margin:0 0 .4em;}
+ul{margin:.4em 0; padding-left:1.3em;}
+li{margin:.3em 0;}
+.foot{margin-top:3em; padding-top:1.2em; border-top:1px solid var(--line); font-size:.82rem; color:var(--ink2);}
+.scn{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; margin:1em 0;}
+.scn .card{margin:0;}
+.scn .prob{font-size:1.5rem; font-weight:800; font-variant-numeric:tabular-nums;}
+a{color:var(--accent);}
+@media (max-width:640px){ .bar-row .lbl{flex-basis:120px; font-size:.78rem;} }
+</style>
+
+<main>
+<header>
+<div class="eyebrow" style="margin-top:0">H2 2026 Investment Strategy · 프로젝트 리포트 v1</div>
+<h1>2026년 하반기 미국 주식시장 투자전략 및 최적 포트폴리오</h1>
+<p class="meta">데이터 기준: 2026-07-22 종가 전후 (ET) · 발행 2026-07-23 · 조사: 매크로·유동성 / 시장 국면 / 자금흐름·포지셔닝 / 섹터 로테이션(14) / 종목 스크리닝(19) 5개 병렬 조사 종합 · 작성: CIO(팀장) 직접 종합</p>
+</header>
+
+<!-- ══════════ 1. Executive Summary ══════════ -->
+<h2><span class="no">1</span>Executive Summary</h2>
+<div class="verdict">
+<h3>시장 판단: 중립 (강세 편향) — 후기 상승장, 선별적 참여</h3>
+<ul>
+<li><b>7월 변동성의 주범은 유동성이 아니다.</b> 핵심 원인은 <b>포지셔닝 과열(⑫)</b>, 증폭기는 <b>옵션·파생 수급(⑬)</b>, 촉발제는 <b>"CAPEX 상향 = FCF 파괴" 해석 체제 전환(①·②)</b>과 <b>매파 Fed 리프라이싱(⑤)</b>이다. 사용자의 유동성 가설은 <span class="tag warn">일부 타당</span> — 스톡(저량)은 건재하나 TGA 재적립발 플로우 드레인은 실재.</li>
+<li><b>펀더멘털은 아직 꺾이지 않았다.</b> Q2 어닝 서프라이즈율 88%, 서프라이즈 폭 +16.4%(5년 평균의 2배), CY26 EPS 성장 컨센 +24.5%. A/D 라인은 신고가를 동반했고 breadth는 확산 중.</li>
+<li><b>최대 역풍은 Fed.</b> 7/28~29 FOMC는 동결 유력(75~84%)이나 <b>9월까지 인상 확률 ~78%</b>가 프라이싱됨(CME FedWatch 7/22). 5월 CPI 4.2% YoY, Brent $94. 완화 기대가 아니라 긴축 리스크 국면.</li>
+<li><b>전략:</b> 주식 82~85%(전략 A) / 70%(전략 B) 참여를 유지하되, AI 인프라 내에서 <b>메모리 → 로직·파운드리·전력 인프라로 무게중심 이동</b>, 에너지를 인플레 헤지로 편입, 7/29~30 실적 위크와 9월 FOMC를 배분 재조정 트리거로 설정.</li>
+<li><b>신뢰도 62/100</b> — 5개 조사 중 4개가 "조정은 수급 주도, 펀더멘털 건재"에 정합. Fed 경로 불확실성과 1주 내 대량 정보 유입(실적 위크)이 상단을 제한.</li>
+</ul>
+</div>
+
+<div class="grid2">
+<div class="kpi"><div class="v">7,499</div><div class="l">S&amp;P500 (7/22 종가) · 연말 스트래티지스트 컨센 평균 7,716</div></div>
+<div class="kpi"><div class="v">~78%</div><div class="l">9월까지 25bp 인상 확률 (CME FedWatch, 7/22) · 7월 동결 75~84%</div></div>
+<div class="kpi"><div class="v">88% · +16.4%</div><div class="l">Q2 어닝 비트율 · 서프라이즈 폭 (FactSet 7/17, 보고 10% 시점)</div></div>
+<div class="kpi"><div class="v">9.5~9.6</div><div class="l">BofA Bull&amp;Bear (매도 신호권) · NAAIM 95.6 · 반도체 HF 롱 82%</div></div>
+</div>
+
+<!-- ══════════ 2. 현재 시장 진단 ══════════ -->
+<h2><span class="no">2</span>현재 시장 진단 — 7월 변동성 원인 15개 후보 판정</h2>
+<p><span class="fact">[사실]</span> 7월 중 S&amp;P500 -2.7% 수준 조정 대비 Mag7 -7.2%, SOX -20%(3주), 메모리(MU/SNDK/삼성/하이닉스) 고점 대비 -20~-40% — 낙폭이 극단적으로 차별화됐다. <span class="fact">[추론]</span> 시장 전체 유동성 문제라면 나타날 수 없는 패턴으로, 원인은 "가장 붐볐던 자리"에 집중된 수급 청산이다.</p>
+
+<div class="tw"><table>
+<tr><th>#</th><th>원인 후보</th><th>판정</th><th>핵심 근거 (출처·기준일)</th></tr>
+<tr><td>⑫</td><td><b>포지셔닝 과열</b></td><td><span class="tag crit">타당 — 핵심 원인</span></td><td>BofA Bull&amp;Bear 9.5~9.6(매도 신호권), NAAIM 95.6, 헤지펀드 반도체 롱 82%·숏 0% — "팔 사람만 가득한" 상태에서 트리거 발생 (7월 중순)</td></tr>
+<tr><td>⑬</td><td><b>옵션·파생 수급</b></td><td><span class="tag crit">타당 — 증폭기</span></td><td>S&amp;P ~7,535 하회 시 딜러 네거티브 감마 전환, 0DTE 비중 60~63%, CTA 하방 비대칭 -$141.4B — 하락을 기계적으로 증폭</td></tr>
+<tr><td>①②</td><td>밸류에이션 부담 + 기대 선반영</td><td><span class="tag warn">부분 타당 — 촉발제</span></td><td>지수 Fwd PER 20.3 vs 10년 평균 19.0. 7/16 TSMC·7/22 Alphabet: CAPEX 상향에도 주가 하락 — "상향=수요 증거"에서 "상향=FCF 파괴"로 해석 체제 전환</td></tr>
+<tr><td>⑤</td><td>금리·인플레이션</td><td><span class="tag warn">타당 — 상당한 기여</span></td><td>5월 CPI 4.2% YoY(에너지 +23.5%), 9월 인상 확률 ~78% 프라이싱, 10년물 상승 — 성장주 듀레이션 압박 (CME/CNBC 7/22)</td></tr>
+<tr><td>⑥~⑩</td><td>유동성 (M2/QT/TGA/RRP/재정)</td><td><span class="tag warn">일부 타당</span></td><td>아래 3장 상술 — 스톡 건재, TGA 플로우 드레인만 실재</td></tr>
+<tr><td>⑪</td><td>자금 유입 둔화</td><td><span class="tag good">타당하지 않음</span></td><td>주간 미국 주식형 유입 +$55~57B로 기록적. 단 자사주 블랙아웃(7/14~8/8)이 매수 공백의 부분 요인</td></tr>
+<tr><td>④⑭</td><td>경기 둔화 · 실적 증가율 둔화</td><td><span class="tag good">타당하지 않음</span></td><td>Q2 비트율 88%·서프라이즈 +16.4%, CY26 컨센 +24.5%로 연초(15%) 대비 상향 — 이익은 가속 중 (FactSet 7월)</td></tr>
+<tr><td>③</td><td>CapEx 둔화 우려</td><td><span class="tag good">타당하지 않음</span></td><td>실제로는 GOOGL $195~205B 상향, AMZN ~$200B, 2027 "significantly higher" 유지 — 문제는 둔화가 아니라 '과잉' 해석</td></tr>
+<tr><td>⑮</td><td>기타 구조 (블랙아웃·집중도)</td><td><span class="tag neut">보조 요인</span></td><td>상위 10종목 집중도 41~43% 사상 최고, 마진 부채 $1.53T(+51.5% YoY) — 취약성을 키우는 배경 변수</td></tr>
+</table></div>
+
+<h3>시장 국면 판정: 후기 상승장 (분배국면 감시)</h3>
+<ul>
+<li><span class="fact">[사실]</span> 강세 지속 근거: A/D 라인 신고가 동반, breadth 확산, 상반기 상승은 실적 주도(EPS +28.6%/+24.7%), 밸류에이션 확장 기여는 제한적</li>
+<li><span class="fact">[사실]</span> 경계 근거: 주도주(Mag7) 이탈, 마진 부채 $1.53T 사상 최고, 집중도 기록권, 가치주가 성장주를 상반기 아웃퍼폼(16.3% vs 5.3%)</li>
+<li><span class="fact">[추론]</span> 분배국면 확정 조건: 지수 신고가 시 A/D 미동반 + 마진 부채 감소 전환 + 방어주 상대강도 역전 — 현재는 미충족</li>
+</ul>
+
+<!-- ══════════ 3. 유동성 가설 검증 ══════════ -->
+<h2><span class="no">3</span>사용자 유동성 가설 검증 + 상반기 성과 귀인</h2>
+<div class="verdict">
+<h3>유동성 가설 판정: <span class="tag warn" style="font-size:.85rem">일부 타당</span></h3>
+<ul>
+<li><b>근거 ① (반박):</b> 유동성 스톡은 감소하지 않았다 — M2 +5.6% YoY 증가, QT는 2025-12-01 종료, 시카고연준 NFCI -0.538로 완화권 (FRED, 7월 중순)</li>
+<li><b>근거 ② (지지):</b> 플로우 드레인은 실재한다 — TGA 재적립 약 $200B→$745B가 시중 유동성을 흡수했고 RRP 완충은 ~$2B로 소진되어 이번 드레인은 지준에서 직접 빠졌다</li>
+<li><b>근거 ③ (반박):</b> 낙폭 차별화(Mag7 -7.2% vs 지수 -2.7%)는 시장 전반 유동성 위축과 불일치 — 포지셔닝·금리·CAPEX 해석 체제가 더 큰 설명력을 가진다</li>
+</ul>
+<p class="small">결론: "유동성 공급이 줄어 시장이 빠졌다"는 <b>스톡 관점에서는 기각</b>, "TGA 재적립이 수급을 조였다"는 <b>플로우 관점에서는 채택</b>. 단 주범이 아니라 배경 요인이다.</p>
+</div>
+
+<h3>상반기(1~6월) 성과 귀인 분석</h3>
+<div class="tw"><table>
+<tr><th>기여 요인</th><th>판정</th><th>근거</th></tr>
+<tr><td>실적 (EPS 성장)</td><td><span class="tag good">주 동력</span></td><td>Q1 +28.6%, Q2 +24.7%E — 지수 상승의 대부분을 이익이 설명. 단 Mag7 기여에는 일회성 요인 캐비앗 존재</td></tr>
+<tr><td>밸류에이션 확장</td><td><span class="tag neut">제한적</span></td><td>Fwd PER 20.3 vs 5년 평균 19.9 — 확장 폭 크지 않음</td></tr>
+<tr><td>유동성</td><td><span class="tag neut">중립</span></td><td>M2 증가·QT 종료가 우호적 배경이었으나 직접 동력 아님</td></tr>
+<tr><td>기대감 (AI 내러티브)</td><td><span class="tag warn">국지적 과열</span></td><td>반도체(SOXX +84%)·전력(GEV +70%)에 집중 — 7월 조정의 진앙</td></tr>
+<tr><td>수급 (자금 유입)</td><td><span class="tag good">강한 지지</span></td><td>주간 +$55~57B 기록적 유입 지속, EWY 주간 $2.8B 등 글로벌 확산</td></tr>
+</table></div>
+
+<!-- ══════════ 4. 하반기 전망 ══════════ -->
+<h2><span class="no">4</span>하반기 전망 — Bull / Base / Bear</h2>
+<p class="small">확률은 통계적 확률이 아니라 현재 정보 기반의 주관적 추정이다. <span class="fact">[전망]</span></p>
+<div class="scn">
+<div class="card">
+<div class="prob" style="color:var(--good)">25%</div>
+<h3>Bull — 재점화</h3>
+<ul class="small" style="font-size:.85rem">
+<li>조건: 9월 인상 회피(유가 안정·CPI 둔화) + 7/29~30 실적 위크에서 CAPEX 해석 체제 정상화</li>
+<li>S&amp;P500 7,900~8,250 (연말 컨센 상단)</li>
+<li>주도: 반도체 복귀(메모리 포함), AI 인프라 전반, 성장주 리레이팅</li>
+</ul>
+</div>
+<div class="card" style="border-color:var(--accent)">
+<div class="prob" style="color:var(--accent)">50%</div>
+<h3>Base — 박스 + 로테이션</h3>
+<ul class="small" style="font-size:.85rem">
+<li>조건: 7월 동결 + 9월 1회 인상(또는 매파 동결), 실적은 견조하나 멀티플 압박 지속</li>
+<li>S&amp;P500 7,200~7,800 박스</li>
+<li>주도: 에너지·금융·전력 인프라 상대 강세, AI는 로직·파운드리 선별, 메모리 고변동 지속</li>
+</ul>
+</div>
+<div class="card">
+<div class="prob" style="color:var(--crit)">25%</div>
+<h3>Bear — 분배국면 확정</h3>
+<ul class="small" style="font-size:.85rem">
+<li>조건: 9월 인상 + 유가 $100+ 고착 + CAPEX 하향 1개사 이상 또는 메모리 정점 확정</li>
+<li>S&amp;P500 7,000 하회, 고점 대비 -15~20%</li>
+<li>취약: 고멀티플 성장주, 메모리, REIT — 마진 부채 $1.53T 청산 연쇄 리스크</li>
+</ul>
+</div>
+</div>
+
+<!-- ══════════ 5. 섹터 매력도 ══════════ -->
+<h2><span class="no">5</span>섹터 매력도 순위 (14개 · 100점 스코어링)</h2>
+<p class="small">배점: 성장성 25 / 이익모멘텀 20 / 밸류에이션 15 / 가격모멘텀 15 / 매크로 적합성 10 / 재무건전성 10 / 하방위험 5. 매크로 점수는 "연내 인하"가 아닌 <b>실제 데이터(매파 Fed·인상 리스크·유가)</b> 기준으로 채점.</p>
+
+<div class="card">
+<div class="bar-row"><div class="lbl">1 정보기술 XLK</div><div class="trk"><div class="fill" style="width:72%; background:var(--c-blue)"></div></div><div class="val">72</div></div>
+<div class="bar-row"><div class="lbl">2 전력·에너지 인프라</div><div class="trk"><div class="fill" style="width:71%; background:var(--c-aqua)"></div></div><div class="val">71</div></div>
+<div class="bar-row"><div class="lbl">3 에너지 XLE</div><div class="trk"><div class="fill" style="width:69%; background:var(--c-orange)"></div></div><div class="val">69</div></div>
+<div class="bar-row"><div class="lbl">4 반도체 SOXX/SMH</div><div class="trk"><div class="fill" style="width:68%; background:var(--c-blue)"></div></div><div class="val">68</div></div>
+<div class="bar-row"><div class="lbl">5 커뮤니케이션 XLC</div><div class="trk"><div class="fill" style="width:66%; background:var(--c-magenta)"></div></div><div class="val">66</div></div>
+<div class="bar-row"><div class="lbl">6 산업재 XLI</div><div class="trk"><div class="fill" style="width:63%; background:var(--c-yellow)"></div></div><div class="val">63</div></div>
+<div class="bar-row"><div class="lbl">7 금융 XLF</div><div class="trk"><div class="fill" style="width:62%; background:var(--c-yellow)"></div></div><div class="val">62</div></div>
+<div class="bar-row"><div class="lbl">8 소재 XLB</div><div class="trk"><div class="fill" style="width:58%; background:var(--ink2)"></div></div><div class="val">58</div></div>
+<div class="bar-row"><div class="lbl">9 필수소비재 XLP</div><div class="trk"><div class="fill" style="width:54%; background:var(--ink2)"></div></div><div class="val">54</div></div>
+<div class="bar-row"><div class="lbl">10 SW·사이버보안</div><div class="trk"><div class="fill" style="width:53%; background:var(--ink2)"></div></div><div class="val">53</div></div>
+<div class="bar-row"><div class="lbl">11 헬스케어 XLV</div><div class="trk"><div class="fill" style="width:52%; background:var(--ink2)"></div></div><div class="val">52</div></div>
+<div class="bar-row"><div class="lbl">12 유틸리티 XLU</div><div class="trk"><div class="fill" style="width:49%; background:var(--ink2)"></div></div><div class="val">49</div></div>
+<div class="bar-row"><div class="lbl">13 임의소비재 XLY</div><div class="trk"><div class="fill" style="width:46%; background:var(--crit)"></div></div><div class="val">46</div></div>
+<div class="bar-row"><div class="lbl">14 부동산 XLRE</div><div class="trk"><div class="fill" style="width:45%; background:var(--crit)"></div></div><div class="val">45</div></div>
+<p class="small">1~4위는 3점 이내 초박빙 — 순위보다 "AI 인프라 실적 vs 매파 Fed 밸류 압박"의 공통 리스크 구조가 본질.</p>
+</div>
+
+<h3>상위 5개 논리 요약 <span class="fact">[추론/전망]</span></h3>
+<ul>
+<li><b>1위 정보기술(72):</b> CY26 +24.5% 지수 이익성장의 엔진. 리스크는 Fwd PER 26.3배에서의 금리 인상 — 업황의 상당분 기반영.</li>
+<li><b>2위 전력·에너지 인프라(71):</b> GEV 백로그 $263B, 데이터센터 장비 수요 연 25% 성장 — AI 테마 중 금리·소비 민감도 최저. 단 <b>GEV는 7/22 Q2 EPS -20.6% 미스</b>(종목 조사에서 확인)로 기기보다 VRT·IPP(CEG) 중심 접근.</li>
+<li><b>3위 에너지(69):</b> 섹터 최저 밸류(Fwd 13.4배) + 호르무즈 지정학 프리미엄 — 매파 국면의 헤지. 펀더멘털은 과잉공급(IEA 370~400만 b/d)이라 <b>트레이딩·헤지 비중</b>으로만.</li>
+<li><b>4위 반도체(68):</b> 이익 모멘텀 절대 최강이나 -20% 조정이 점수를 못 올림(밸류 개선 = 모멘텀 악화 상쇄). <b>메모리는 하방 변동성 최대 하위테마로 강등</b> — 로직/ASIC/파운드리 우선.</li>
+<li><b>5위 커뮤니케이션(66):</b> "이익 두 자릿수 성장 + 주가 YTD -5.7%" — 기대·펀더멘털 괴리 최대의 역발상 후보.</li>
+</ul>
+<p class="small">회피: 부동산(금리 인상 최대 피해) · 임의소비재(최고 PER + 마이너스 수익률 + 유가발 소비 압박) · 유틸리티(테마 프리미엄만 선반영, 23배 vs 역사 17배).</p>
+
+<!-- ══════════ 6. 메모리 판단 ══════════ -->
+<h2><span class="no">6</span>메모리 반도체 판단</h2>
+<div class="verdict">
+<h3>판정: <span class="tag warn" style="font-size:.85rem">보유 (조건부)</span> — 적극보유 아님 · 축소 아님</h3>
+<ul>
+<li><b>근거 ① (보유):</b> 이익 모멘텀이 전 종목 최상위 — MU FQ3 매출 $41.5B(가이던스 +24% 상회)·GM 84.9%·FQ4 가이던스 $50B, 종목 스코어 MU 81점(공동 2위)·SNDK 76점(공동 5위). 조정에도 순위가 유지된 것은 이익이 낙폭을 이긴 결과.</li>
+<li><b>근거 ② (상한 관리):</b> 섹터 관점에서 정점 논쟁 진입 — SK하이닉스 HBM 증설 속도조절 보도의 성격(규율 vs 수요둔화) 미판별, 하방위험 점수 전 종목 최저(2/5), Fwd PER 5.5x는 "피크 EPS에 낮은 멀티플"이라는 사이클 정점 신호일 가능성 병존.</li>
+<li><b>근거 ③ (판별 대기):</b> 8/5 SNDK 실적(LTA 커버리지 실체), 8월말 NVDA, 9월 MU 가이던스가 판별 이벤트 — 그 전 추가 매수는 분할·조건부로만. 기존 프로젝트 결론(MU:SNDK = 2:1 선호) 유지.</li>
+</ul>
+<p class="small">포트폴리오 반영: 전략 A에서 MU+SNDK 합산 15% 상한, 전략 B에서 8% 상한. DRAM 현물가 하락 전환 시 즉시 절반 축소.</p>
+</div>
+
+<!-- ══════════ 7. 전략 A ══════════ -->
+<h2><span class="no">7</span>전략 A — 수익률 극대화 포트폴리오</h2>
+<p class="small">전제: 공격적 성향 + 손절 규율 확립(사용자 확인 가정). 개별 종목 12종 + 현금 18%. 종목 스코어(2장 종목 조사) 상위권 중심, 단일 종목 12% 상한.</p>
+
+<div class="stack">
+<div style="width:12%; background:var(--c-blue)">NVDA 12</div>
+<div style="width:10%; background:var(--c-blue); filter:brightness(1.15)">MU 10</div>
+<div style="width:9%; background:var(--c-blue); filter:brightness(.85)">TSM 9</div>
+<div style="width:9%; background:var(--c-magenta)">LLY 9</div>
+<div style="width:7%; background:var(--c-blue); filter:brightness(1.3)">AVGO 7</div>
+<div style="width:6%; background:var(--c-yellow)">META 6</div>
+<div style="width:5%; background:var(--c-yellow); filter:brightness(.85)">GOOGL 5</div>
+<div style="width:5%; background:var(--c-blue); filter:brightness(1.45)">SNDK 5</div>
+<div style="width:5%; background:var(--c-aqua)">VRT 5</div>
+<div style="width:5%; background:var(--c-orange); filter:brightness(.9)">GS 5</div>
+<div style="width:4%; background:var(--c-aqua); filter:brightness(.85)">CEG 4</div>
+<div style="width:5%; background:var(--c-orange)">XLE 5</div>
+<div style="width:18%; background:var(--ink2)">현금 18</div>
+</div>
+<div class="legend">
+<span style="--sw:var(--c-blue)">AI 인프라·반도체 43% (메모리 15%)</span>
+<span style="--sw:var(--c-aqua)">전력 인프라 9%</span>
+<span style="--sw:var(--c-orange)">에너지·금융 10%</span>
+<span style="--sw:var(--c-yellow)">빅테크 플랫폼 11%</span>
+<span style="--sw:var(--c-magenta)">헬스케어 9%</span>
+<span style="--sw:var(--ink2)">현금 18%</span>
+</div>
+
+<div class="tw"><table>
+<tr><th>종목</th><th class="num">비중</th><th class="num">스코어</th><th>역할 / 진입 방식</th><th>손절·축소 기준</th></tr>
+<tr><td><b>NVDA</b></td><td class="num">12%</td><td class="num">82</td><td>핵심 — AI CAPEX 1차 수취인, FY28 기준 ~14x. 현 수준 1/2 + 조정 시 1/2</td><td>하이퍼스케일러 1곳 CAPEX 하향 시 30% 축소</td></tr>
+<tr><td><b>MU</b></td><td class="num">10%</td><td class="num">81</td><td>핵심 — HBM 매진·FQ4 가이던스 $50B. 기보유분 유지, 신규는 9월 가이던스 후</td><td>DRAM 현물가 하락 전환 시 절반 축소</td></tr>
+<tr><td><b>TSM</b></td><td class="num">9%</td><td class="num">78</td><td>실적+모멘텀 동시 보유 — EPS +77%, 실적 후 -7%는 진입 기회</td><td>분기 GM 65% 하회 시 축소</td></tr>
+<tr><td><b>LLY</b></td><td class="num">9%</td><td class="num">81</td><td>분산축 — AI·금리 논쟁 무풍의 실적 성장(경구 GLP-1 승인)</td><td>Foundayo 처방 데이터 부진 시 재평가</td></tr>
+<tr><td><b>AVGO</b></td><td class="num">7%</td><td class="num">72</td><td>커스텀 ASIC — "CAPEX 효율화" 국면의 역설적 수혜, 기대치 리셋 완료</td><td>9월 FY27 AI $100B 목표 하향 시 매도</td></tr>
+<tr><td><b>META</b></td><td class="num">6%</td><td class="num">71</td><td>Mag7 밸류 최선(16x·매출 +33%). 감가상각 리스크 감안 소폭</td><td>광고 성장 25% 미만 + CAPEX 증액 동시 발생 시 매도</td></tr>
+<tr><td><b>GOOGL</b></td><td class="num">5%</td><td class="num">76</td><td>리비전 상향 최대이나 CAPEX 역풍 중 — 7/29 이후 추가 판단</td><td>클라우드 둔화 + CAPEX 증액 시 매도</td></tr>
+<tr><td><b>SNDK</b></td><td class="num">5%</td><td class="num">76</td><td>고변동 — 8/5 실적 전 5% 상한, LTA 커버리지 확인 후 증감</td><td>NAND 계약가 정체 또는 8/5 가이던스 실망 시 절반 축소</td></tr>
+<tr><td><b>VRT</b></td><td class="num">5%</td><td class="num">72</td><td>전력 인프라 — 백로그 $15B·주문 +252%, 고멀티플이라 소폭</td><td>분기 주문 증가율 급감 시 매도</td></tr>
+<tr><td><b>GS</b></td><td class="num">5%</td><td class="num">71</td><td>변동성 수혜 — Q2 EPS +92%, 트레이딩·IB 사이클</td><td>VIX 저위 고착 시 축소</td></tr>
+<tr><td><b>CEG</b></td><td class="num">4%</td><td class="num">60</td><td>전력 후발주자 — 급락 후 상대 저밸류 (저신뢰 채점, 소폭)</td><td>데이터센터 계약 공시 부재 지속 시 정리</td></tr>
+<tr><td><b>XLE</b></td><td class="num">5%</td><td class="num">—</td><td>인플레·지정학 헤지 — 유가 급등 시 포트 나머지 손실 상쇄</td><td>호르무즈 해소 + WTI $70 하회 시 정리</td></tr>
+<tr><td><b>현금</b></td><td class="num">18%</td><td class="num">—</td><td>9월 FOMC·실적 위크 이후 재배치 실탄. Bear 트리거 시 방어</td><td>—</td></tr>
+</table></div>
+
+<div class="grid2">
+<div class="kpi"><div class="v">+12~18%</div><div class="l">12개월 기대수익 (시나리오 가중: Bull +35~45 / Base +12~20 / Bear -18~25) [전망]</div></div>
+<div class="kpi"><div class="v">~22~26%</div><div class="l">연환산 변동성 추정 (포트 베타 ~1.25~1.35 가정) [추론]</div></div>
+<div class="kpi"><div class="v">-25~30%</div><div class="l">Bear 시나리오 예상 MDD [추론, 베타·상관 기반]</div></div>
+</div>
+
+<!-- ══════════ 8. 전략 B ══════════ -->
+<h2><span class="no">8</span>전략 B — 수익 70 : 안정 30 균형 포트폴리오</h2>
+<p class="small">수익 슬리브 70%(개별 11종 60% + 에너지 ETF 5% + 로테이션 5%), 안정 슬리브 30%. <b>금리 인상 리스크 국면이므로 안정 자산은 장기채가 아닌 단기국채 중심</b> — 장기채는 현 환경에서 '안정'이 아니다.</p>
+
+<div class="stack">
+<div style="width:10%; background:var(--c-blue)">NVDA 10</div>
+<div style="width:8%; background:var(--c-blue); filter:brightness(.85)">TSM 8</div>
+<div style="width:8%; background:var(--c-magenta)">LLY 8</div>
+<div style="width:6%; background:var(--c-blue); filter:brightness(1.15)">MU 6</div>
+<div style="width:6%; background:var(--c-yellow)">META 6</div>
+<div style="width:5%; background:var(--c-yellow); filter:brightness(.85)">GOOGL 5</div>
+<div style="width:5%; background:var(--c-blue); filter:brightness(1.3)">AVGO 5</div>
+<div style="width:4%; background:var(--c-orange); filter:brightness(.9)">GS 4</div>
+<div style="width:3%; background:var(--c-aqua)">VRT 3</div>
+<div style="width:3%; background:var(--c-aqua); filter:brightness(.85)">CEG 3</div>
+<div style="width:2%; background:var(--c-blue); filter:brightness(1.45)">SN 2</div>
+<div style="width:5%; background:var(--c-orange)">XLE 5</div>
+<div style="width:5%; background:var(--c-magenta); filter:brightness(.8)">XLC 5</div>
+<div style="width:15%; background:var(--ink2)">단기국채 15</div>
+<div style="width:5%; background:var(--ink2); filter:brightness(1.3)">TIPS 5</div>
+<div style="width:5%; background:var(--c-yellow); filter:brightness(.6)">금 5</div>
+<div style="width:5%; background:var(--ink2); filter:brightness(.75)">XLP 5</div>
+</div>
+<div class="legend">
+<span style="--sw:var(--c-blue)">AI 인프라·반도체 31% (메모리 8%)</span>
+<span style="--sw:var(--c-aqua)">전력 6%</span>
+<span style="--sw:var(--c-orange)">에너지·금융 9%</span>
+<span style="--sw:var(--c-yellow)">플랫폼 11%</span>
+<span style="--sw:var(--c-magenta)">헬스케어·역발상 13%</span>
+<span style="--sw:var(--ink2)">안정 슬리브 30%</span>
+</div>
+
+<div class="tw"><table>
+<tr><th>구분</th><th>구성</th><th class="num">비중</th><th>논리</th></tr>
+<tr><td rowspan="4"><b>수익 70%</b></td><td>AI 인프라 코어 (NVDA 10 · TSM 8 · AVGO 5 · MU 6 · SNDK 2)</td><td class="num">31%</td><td>이익 모멘텀 최상위군. 메모리 8% 상한 — 판별 이벤트 전 보수적</td></tr>
+<tr><td>플랫폼·성장 분산 (LLY 8 · META 6 · GOOGL 5)</td><td class="num">19%</td><td>LLY는 AI 무풍 성장, META/GOOGL은 역사적 저밸류 구간</td></tr>
+<tr><td>사이클·전력 (GS 4 · VRT 3 · CEG 3)</td><td class="num">10%</td><td>변동성 수혜 + 구조적 전력 수요</td></tr>
+<tr><td>섹터 ETF (XLE 5 · XLC 5)</td><td class="num">10%</td><td>인플레 헤지 + 역발상 로테이션 후보</td></tr>
+<tr><td rowspan="4"><b>안정 30%</b></td><td>단기국채 (SGOV/BIL 등)</td><td class="num">15%</td><td>무위험 ~4%대 수익 + 재배치 실탄. 금리 인상 시에도 무손상</td></tr>
+<tr><td>물가연동채 (TIPS 단기)</td><td class="num">5%</td><td>CPI 4.2% 환경의 실질가치 방어</td></tr>
+<tr><td>금 (GLD 등)</td><td class="num">5%</td><td>지정학(호르무즈)·스태그플레이션 꼬리 헤지</td></tr>
+<tr><td>필수소비재 (XLP)</td><td class="num">5%</td><td>하방 방어력 최고 섹터(하방점수 5/5), 배당</td></tr>
+</table></div>
+
+<div class="grid2">
+<div class="kpi"><div class="v">+8~14%</div><div class="l">12개월 기대수익 (시나리오 가중) [전망]</div></div>
+<div class="kpi"><div class="v">~14~17%</div><div class="l">연환산 변동성 추정 (포트 베타 ~0.8 가정) [추론]</div></div>
+<div class="kpi"><div class="v">-15~18%</div><div class="l">Bear 시나리오 예상 MDD [추론]</div></div>
+</div>
+
+<div class="tw"><table>
+<tr><th>비교</th><th>전략 A</th><th>전략 B</th></tr>
+<tr><td>주식 비중</td><td class="num">82%</td><td class="num">70% (ETF 포함)</td></tr>
+<tr><td>메모리 (MU+SNDK)</td><td class="num">15%</td><td class="num">8%</td></tr>
+<tr><td>기대수익 (12M, 가중)</td><td class="num">+12~18%</td><td class="num">+8~14%</td></tr>
+<tr><td>변동성</td><td class="num">22~26%</td><td class="num">14~17%</td></tr>
+<tr><td>Bear MDD</td><td class="num">-25~30%</td><td class="num">-15~18%</td></tr>
+<tr><td>적합 성향</td><td>공격적 + 손절 규율 이행 가능</td><td>변동성 수용도 중간, 회복 탄력 중시</td></tr>
+</table></div>
+
+<!-- ══════════ 9. 스트레스 테스트 ══════════ -->
+<h2><span class="no">9</span>스트레스 테스트 (7종)</h2>
+<p class="small"><span class="fact">[추론]</span> 팀장 직접 추정 — 종목 베타·상관·과거 유사 국면 낙폭 기반의 근사치이며 정밀 시뮬레이션이 아니다. 가정: 전략 A 베타 ~1.3, 전략 B 주식 슬리브 베타 ~1.15 + 안정 슬리브 베타 ~0.1.</p>
+<div class="tw"><table>
+<tr><th>시나리오</th><th class="num">S&amp;P500</th><th class="num">전략 A</th><th class="num">전략 B</th><th>비고</th></tr>
+<tr><td>① 9월 +25bp 인상 + 매파 가이던스</td><td class="num">-6~10%</td><td class="num">-9~14%</td><td class="num">-5~8%</td><td>고멀티플(VRT) 최대 타격, 현금·단기채가 완충</td></tr>
+<tr><td>② 메모리 사이클 정점 확정</td><td class="num">-2~4%</td><td class="num">-7~10%</td><td class="num">-3~5%</td><td>MU/SNDK -30~40% 가정. A의 메모리 15%가 -5~6%p 직접 기여</td></tr>
+<tr><td>③ CAPEX 가이던스 하향 (1개사+)</td><td class="num">-8~12%</td><td class="num">-13~18%</td><td class="num">-7~10%</td><td>AI 콤플렉스 -15~25% — 포트 최대 단일 리스크</td></tr>
+<tr><td>④ 호르무즈 격화 · 유가 $110+</td><td class="num">-8~12%</td><td class="num">-8~12%</td><td class="num">-5~7%</td><td>XLE·금이 부분 상쇄 (A: XLE 5%, B: XLE+금 10%)</td></tr>
+<tr><td>⑤ 대만 지정학 이벤트</td><td class="num">-10~15%</td><td class="num">-14~20%</td><td class="num">-8~12%</td><td>TSM 직격 + NVDA/AVGO 공급망 연쇄</td></tr>
+<tr><td>⑥ AI 신용 이벤트 (스프레드 급확대)</td><td class="num">-12~18%</td><td class="num">-16~22%</td><td class="num">-9~13%</td><td>채권 커버리지 2배 고착 + SPV 부실 시나리오</td></tr>
+<tr><td>⑦ 분배국면 → 약세장 (마진 청산 연쇄)</td><td class="num">-20%+</td><td class="num">-25~30%</td><td class="num">-13~17%</td><td>마진 부채 $1.53T 청산 — 전략 공통 최악 케이스</td></tr>
+</table></div>
+
+<!-- ══════════ 10. 이벤트 ══════════ -->
+<h2><span class="no">10</span>향후 3개월 핵심 이벤트</h2>
+<div class="tw"><table>
+<tr><th>일자 (ET)</th><th>이벤트</th><th>포트폴리오 함의</th></tr>
+<tr><td>7/23</td><td>INTC 실적</td><td>반도체 심리 보조 지표</td></tr>
+<tr><td>7/27</td><td>CXMT 상장 · Kimi K3 공개</td><td>메모리 공급·AI 효율화 서사 재점화 여부</td></tr>
+<tr><td><b>7/28~29</b></td><td><b>FOMC</b> (동결 75~84% 프라이싱)</td><td>성명·기자회견의 9월 신호 — 매파 서프라이즈 시 전략 공통 현금 확대</td></tr>
+<tr><td><b>7/29</b></td><td><b>MSFT · META 실적</b> + SK하이닉스</td><td>"CAPEX 상향=매도" 체제의 확정/해제 재판일 — AI 비중 재조정 트리거</td></tr>
+<tr><td>7/30</td><td>AMZN · AAPL + 삼성전자 실적</td><td>동상</td></tr>
+<tr><td><b>8/5</b></td><td><b>SNDK 실적</b> (FQ4 가이던스 EPS $30~33)</td><td>LTA 커버리지 실체 확인 — SNDK 비중 증감 결정일</td></tr>
+<tr><td>8/8~</td><td>자사주 블랙아웃 해제</td><td>기계적 매수 수급 복귀 (주당 ~$20B 추정)</td></tr>
+<tr><td>8월 초·중순</td><td>7월 고용 · CPI</td><td>9월 인상 확률 재프라이싱 — 유가 경로가 핵심</td></tr>
+<tr><td>8월 말</td><td>NVDA 실적</td><td>AI 수요의 최종 판정 — 메모리 판별 이벤트 ①</td></tr>
+<tr><td><b>9월 중순</b></td><td><b>9월 FOMC</b> (인상 ~78% 프라이싱)</td><td>인상 시 Base~Bear 경로, 회피 시 Bull 재점화</td></tr>
+<tr><td>9월 하순</td><td>MU FQ1 실적·가이던스</td><td>메모리 판별 이벤트 ② — MU 비중 최종 재조정</td></tr>
+</table></div>
+
+<!-- ══════════ 11. 업데이트 조건 ══════════ -->
+<h2><span class="no">11</span>전략 업데이트 조건 (이 리포트가 무효화되는 경우 포함)</h2>
+<ul>
+<li><b>금리:</b> 9월 인상 현실화 → 성장주 멀티플 압축 심화, 전략 공통 현금 +5~10%p·XLRE/XLU류 회피 강화. 반대로 인상 회피 확정(유가 안정·CPI 둔화) → 현금 절반을 AI 인프라·반도체로 재배치.</li>
+<li><b>CAPEX 해석 체제:</b> 7/29~30 실적 위크에서 CAPEX 상향에도 주가가 상승 반전(체제 해제) → 메모리 포함 AI 비중 상향. 체제 지속 + 가이던스 하향 등장 → AI 비중 -10%p.</li>
+<li><b>메모리:</b> DRAM 현물가 하락 전환 또는 8/5 SNDK LTA 실망 → MU/SNDK 절반 축소. HBM4 계약가 확정·NVDA 실적 서프라이즈 → 상한 완화.</li>
+<li><b>국면:</b> 지수 신고가에 A/D 미동반 + 마진 부채 감소 전환 → 분배국면 판정, 전략 B형으로 전환 권고.</li>
+<li><b>리포트 무효화:</b> 위 조건 중 2개 이상이 동시에 악화 방향으로 발동하면 본 리포트의 배분은 유효하지 않다 — 전면 재분석 필요.</li>
+</ul>
+
+<!-- ══════════ 최종 결론 ══════════ -->
+<div class="eyebrow">Final Verdict</div>
+<div class="verdict">
+<h3>최종 결론 (차터 규정 형식)</h3>
+<ul>
+<li><b>시장 판단:</b> 중립 (강세 편향) — 후기 상승장, 분배국면 미확정</li>
+<li><b>최중요 변수 3:</b> ① Fed 9월 인상 여부(유가·CPI 경로) ② 하이퍼스케일러 CAPEX 가이던스와 시장의 해석 체제 ③ 메모리 사이클 정점 논쟁의 판별(HBM 계약가·현물가)</li>
+<li><b>유동성 가설:</b> <span class="tag warn">일부 타당</span> — ① 스톡 건재(M2 +5.6%·QT 종료·NFCI -0.538) ② TGA 재적립($200B→$745B)+RRP 소진($2B)의 플로우 드레인은 실재 ③ 낙폭 차별화는 유동성보다 포지셔닝·금리·해석체제로 설명됨</li>
+<li><b>메모리 판단:</b> 보유(조건부) — ① 이익 모멘텀 전 종목 최상위 ② 정점 논쟁·하방위험 최대로 비중 상한 관리 ③ 8/5·8월말·9월 판별 이벤트 전 추가 매수는 분할·조건부. MU:SNDK = 2:1 유지</li>
+<li><b>유망 섹터 3:</b> AI 인프라(로직·ASIC·파운드리 우선) · 전력·에너지 인프라(VRT/CEG 중심) · 에너지(인플레 헤지) — 역발상 후보: 커뮤니케이션</li>
+<li><b>유망 종목 3:</b> NVDA(82점, FY28 ~14x) · LLY(81점, AI 무풍 성장) · TSM(78점, 실적+모멘텀 동시 보유) — MU(81점)는 보유자 홀드, 신규 진입은 판별 이벤트 후</li>
+<li><b>전략 A:</b> 주식 82%(메모리 15% 상한)·현금 18% | 기대 +12~18% | 변동성 22~26% | Bear MDD -25~30%</li>
+<li><b>전략 B:</b> 수익 70(메모리 8%)·안정 30(단기국채 15·TIPS 5·금 5·XLP 5) | 기대 +8~14% | 변동성 14~17% | Bear MDD -15~18%</li>
+<li><b>최대 리스크 3:</b> ① 9월 인상 + 인플레 4%대 고착 ② "CAPEX=FCF 파괴" 체제 지속·확산에 따른 멀티플 압축 ③ 메모리 정점 확정 시 MU/SNDK -30%+ 하방</li>
+<li><b>변경 조건 3:</b> ① 9월 FOMC 결과 ② 7/29~30 실적 위크의 체제 확정/해제 ③ DRAM/NAND 현물가 방향 전환</li>
+<li><b>신뢰도: 62/100</b> — 5개 독립 조사 중 4개가 "조정은 수급 주도·펀더멘털 건재"에 정합(포지셔닝·파생·자금유입·실적). 감점: Fed 경로 불확실, 일부 밸류 데이터 소스 차단으로 추정 사용, 1주 내 실적 위크 대량 정보 유입 예정</li>
+</ul>
+</div>
+
+<!-- ══════════ 출처 ══════════ -->
+<h2 style="border-top:none; padding-top:0"><span class="no">§</span>참고 출처 (핵심)</h2>
+<ul class="small">
+<li>Fed·금리: CME FedWatch (7/22, 9월 누적 인상 ~78%), Polymarket (7월 동결 ~75%), centralbank.watch, CNBC Treasury yields (7/22) — 7월 동결·9월 인상 프라이싱은 복수 소스 교차 확인</li>
+<li>실적·밸류: FactSet Earnings Insight (7/10·7/17), Micron IR (FQ3'26), TSMC 6-K (7/16), Eli Lilly 8-K, GuruFocus Forward PE (7/18~21), Simply Wall St 컨센서스</li>
+<li>유동성: FRED (M2·NFCI·TGA·RRP, 7월 중순), 미 재무부 TGA 일별 잔고</li>
+<li>포지셔닝·파생: BofA Bull&amp;Bear·NAAIM (7월 중순), 딜러 감마·CTA 추정치 (SpotGamma/GS 계열 2차 인용), 0DTE 비중 (CBOE 계열)</li>
+<li>섹터: SPDR 섹터 ETF 수익률 (etfdb·Yahoo·financecharts, 7/21 전후), EIA STEO (7월), GEV 2Q26 8-K</li>
+<li>데이터 한계: stockanalysis.com·Yahoo Finance 직접 조회 403 차단 → 검색 스니펫 교차 수집. SNDK Fwd PER(8.0~10.3x)·CIBR YTD 등 소스 간 상충 항목은 본문에 병기. CRWD는 데이터 상충으로 채점 제외. 조사 에이전트 검토 과정 일부에서 안전 분류기 일시 불가 상태가 보고되어 핵심 수치는 CIO가 재대조함</li>
+</ul>
+
+<div class="foot">
+<p><b>면책조항</b> — 본 자료는 정보 제공 목적의 개인 리서치 보조 자료이며, 등록된 투자자문업자의 투자자문이 아닙니다. 모든 수치는 작성 시점 기준이며 이후 변동될 수 있습니다. 시나리오 확률과 기대수익·MDD는 통계적 확률이 아닌 현재 정보 기반의 주관적 추정입니다. 투자 손익의 책임은 투자자 본인에게 있습니다.</p>
+<p>2026-07-23 · H2-2026 프로젝트 리포트 v1 · 다음 갱신: 7/29~30 실적 위크 후 (v2)</p>
+</div>
+</main>
