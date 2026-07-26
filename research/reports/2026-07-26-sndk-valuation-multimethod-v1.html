@@ -1,0 +1,229 @@
+<title>SNDK 적정주가 멀티메소드 리포트 · 2026-07-26</title>
+<style>
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9;
+  --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e;
+  --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+  --accent:#6b9fe8; --accent-soft:#22304a; --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+  --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e; --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32; }
+}
+:root[data-theme="dark"]{ --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+  --accent:#6b9fe8; --accent-soft:#22304a; --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+  --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e; --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32; }
+:root[data-theme="light"]{ --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9; --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e; --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec; }
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; margin:0; padding:0 20px 80px;}
+main{max-width:960px; margin:0 auto;}
+h1{font-size:1.65em; letter-spacing:-.01em; margin:.2em 0 .2em; text-wrap:balance;}
+h2{font-size:1.18em; margin:2.4em 0 .6em; padding-top:1.1em; border-top:1px solid var(--line);}
+h2 .no{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:.4em; font-size:.85em;}
+p{margin:.5em 0;}
+.small{font-size:.83em; color:var(--ink2);}
+header{padding:2.2em 0 1em;}
+table{border-collapse:collapse; width:100%; font-size:.86em; font-variant-numeric:tabular-nums;}
+th{font-size:.78em; text-transform:uppercase; letter-spacing:.05em; color:var(--ink2); text-align:left; padding:8px 10px; border-bottom:2px solid var(--line); white-space:nowrap;}
+td{padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+.tw{overflow-x:auto; margin:1em 0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:6px 10px;}
+.num{text-align:right; white-space:nowrap;}
+.tag{display:inline-block; font-size:.72em; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.good{background:var(--good-bg); color:var(--good);}
+.tag.warn{background:var(--warn-bg); color:var(--warn);}
+.tag.crit{background:var(--crit-bg); color:var(--crit);}
+.tag.neut{background:var(--neut-bg); color:var(--ink2);}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 22px; margin:1em 0;}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:1em 0;}
+.kpi{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:13px 16px;}
+.kpi .v{font-size:1.3em; font-weight:800; font-variant-numeric:tabular-nums;}
+.kpi .l{font-size:.76em; color:var(--ink2); margin-top:2px;}
+.verdict{border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:1.2em 0;}
+ul{margin:.4em 0; padding-left:1.3em;}
+li{margin:.3em 0;}
+/* football field */
+.ff{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 20px 8px; margin:1em 0;}
+.ffrow{display:flex; align-items:center; gap:10px; margin:9px 0; font-size:.83em;}
+.fflbl{flex:0 0 190px; text-align:right; line-height:1.25;}
+.fflbl .m{font-weight:700;}
+.fflbl .c{display:block; font-size:.85em; color:var(--ink2);}
+.fftrk{flex:1; height:20px; background:var(--neut-bg); border-radius:4px; position:relative;}
+.ffbar{position:absolute; top:3px; height:14px; border-radius:3px; opacity:.75;}
+.ffdot{position:absolute; top:50%; transform:translate(-50%,-50%); width:9px; height:9px; border-radius:50%; background:var(--ink); border:2px solid var(--panel);}
+.ffnow{position:absolute; top:-4px; bottom:-4px; width:2px; background:var(--crit);}
+.ffval{flex:0 0 118px; font-variant-numeric:tabular-nums; font-size:.95em;}
+.ffval b{display:block;}
+.axis{display:flex; justify-content:space-between; font-size:.72em; color:var(--ink2); padding-left:200px; margin-top:4px;}
+.scn{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:1em 0;}
+.scn .card{margin:0;}
+.scn .p{font-size:1.4em; font-weight:800;}
+.foot{margin-top:3em; padding-top:1.2em; border-top:1px solid var(--line); font-size:.8em; color:var(--ink2);}
+.fixbox{background:var(--warn-bg); border-left:4px solid var(--warn); border-radius:0 8px 8px 0; padding:12px 16px; margin:1em 0; font-size:.85em;}
+</style>
+
+<main>
+<header>
+<div class="small" style="letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:700;">SNDK Multi-Method Valuation · CIO 종합</div>
+<h1>SanDisk (SNDK) 적정주가 리포트 — 8개 방법론 교차 검증</h1>
+<p class="small">기준: 2026-07-24 종가 $1,436.56 (금 -10.8%) · 발행 148.1M주 / 희석 157M주 · 시총 ~$213B · 순현금 ~$3.5B (무차입) · 작성 2026-07-26 · <b>실적 발표 8/5 (수) · 인베스터 데이 8/13 (목)</b></p>
+</header>
+
+<div class="verdict">
+<h2 style="border:none; padding:0; margin:0 0 .4em;">종합 판정: <span class="tag warn" style="font-size:.8em;">보유 + 조건부 분할매수 (8/5 확인형)</span> &nbsp;신뢰도 60/100</h2>
+<ul style="font-size:.92em;">
+<li><b>현 주가 $1,437는 베이스 시나리오를 거의 정확히 프라이싱한 상태</b> — 6개 방법 가중 FV <b>$1,340</b>(-7%), 시나리오 기대값 <b>$1,550</b>(+8%). 저평가도 고평가도 아닌 균형점.</li>
+<li>상방은 정보 이벤트가 엽니다: 8/5 LTA 커버리지 50%+ 확인 + FY27 가이드 상회 시 정상화·컨센 앵커($1,540~2,188)로 리레이팅.</li>
+<li>하방 바닥은 계약이 받칩니다: LTA 플로어 존 <b>$1,000~1,150</b> (애널리스트 최저 $1,000·RBC $1,100과 수렴).</li>
+<li>트레이딩 규칙 유지: 판정선 $1,350 종가 이탈 시 추가 매수 중단 · 익절 $1,700/$2,000 존.</li>
+</ul>
+</div>
+
+<div class="grid">
+<div class="kpi"><div class="v">$1,340</div><div class="l">6-Method 가중 FV (-6.7%)</div></div>
+<div class="kpi"><div class="v">$1,550</div><div class="l">시나리오 가중 기대값 (+7.9%)</div></div>
+<div class="kpi"><div class="v">$2,188</div><div class="l">IB 컨센 평균 (23명, +52%)</div></div>
+<div class="kpi"><div class="v">$1,000~1,150</div><div class="l">LTA 플로어 존 (-20~-30%)</div></div>
+</div>
+
+<!-- ═══ 풋볼필드 ═══ -->
+<h2><span class="no">1</span>Football Field — 8개 방법론 한눈에 (축: $500 ~ $3,200)</h2>
+<div class="ff">
+<div class="ffrow"><div class="fflbl"><span class="m">① DCF (사이클 조정)</span><span class="c">함정: 터미널 가정이 지배</span></div>
+<div class="fftrk"><div class="ffbar" style="left:7.4%; width:11.1%; background:var(--c-blue);"></div><div class="ffdot" style="left:12.6%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$840</b><span class="small">$700~1,000</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">② Fwd P/E 6~12x</span><span class="c">FY27 EPS $177 (컨센 19명)</span></div>
+<div class="fftrk"><div class="ffbar" style="left:20.7%; width:39.3%; background:var(--c-blue);"></div><div class="ffdot" style="left:40.4%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$1,590</b><span class="small">$1,060~2,120</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">③ EV/EBITDA 5~8x</span><span class="c">함정: 피크 이익에 피크 배수</span></div>
+<div class="fftrk"><div class="ffbar" style="left:5.2%; width:13.7%; background:var(--c-blue);"></div><div class="ffdot" style="left:11.9%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$820</b><span class="small">$640~1,010</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">④ EV/Sales 4~6x</span><span class="c">사이클 중립 · FY27 매출 $41B</span></div>
+<div class="fftrk"><div class="ffbar" style="left:21.1%; width:19.3%; background:var(--c-aqua);"></div><div class="ffdot" style="left:30.7%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$1,330</b><span class="small">$1,070~1,590</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑤ PEG</span><span class="c">사이클 스파이크 왜곡 — 가중 제외</span></div>
+<div class="fftrk"><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><span class="tag neut">제외</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑥ 정상화 이익 12~20x</span><span class="c">GS 정상화 EPS $110</span></div>
+<div class="fftrk"><div class="ffbar" style="left:30.4%; width:32.6%; background:var(--c-magenta);"></div><div class="ffdot" style="left:38.5%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$1,540</b><span class="small">$1,320~2,200</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑦ 시나리오 가중 EV</span><span class="c">Bull 25 / Base 45 / Bear 30</span></div>
+<div class="fftrk"><div class="ffbar" style="left:18.5%; width:44.4%; background:var(--c-orange);"></div><div class="ffdot" style="left:38.9%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$1,550</b><span class="small">$1,000~2,200</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑧ LTA 플로어 (하방 바닥)</span><span class="c">Bernstein 스트레스 + 계약 $42B</span></div>
+<div class="fftrk"><div class="ffbar" style="left:18.5%; width:5.6%; background:var(--good);"></div><div class="ffdot" style="left:21.3%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$1,075</b><span class="small">$1,000~1,150</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">참고: IB 컨센 (23명)</span><span class="c">Bernstein $3,000 · GS $2,200</span></div>
+<div class="fftrk"><div class="ffbar" style="left:18.5%; width:80.3%; background:var(--c-yellow); opacity:.45;"></div><div class="ffdot" style="left:62.5%;"></div><div class="ffnow" style="left:34.7%;"></div></div>
+<div class="ffval"><b>$2,188</b><span class="small">$1,000~3,169</span></div></div>
+<div class="axis"><span>$500</span><span>$1,000</span><span>$1,500</span><span>$2,000</span><span>$2,500</span><span>$3,200</span></div>
+<p class="small" style="margin:8px 0 6px;">붉은 세로선 = 현재가 $1,436.56 · 점 = 각 방법 베이스 값 · <b>패턴: 사이클 배수 방법(①③)은 하회, 정상화·시나리오·컨센은 상회 — "지속성 논쟁"이 가격 그 자체</b></p>
+</div>
+
+<!-- ═══ 방법론 상세 ═══ -->
+<h2><span class="no">2</span>방법론별 산출 근거 (한 줄 요약)</h2>
+<div class="tw"><table>
+<tr><th>방법</th><th class="num">베이스</th><th>산식</th><th>이 방법의 함정</th><th class="num">가중치</th></tr>
+<tr><td>① DCF</td><td class="num">$840</td><td>FY27 FCF ~$22B → 다운사이클 감쇠(→$8B) → 터미널 3%, WACC 10%</td><td>사이클 진폭 가정에 극도로 민감. 참고치로만</td><td class="num">15%</td></tr>
+<tr><td>② Fwd P/E</td><td class="num">$1,590</td><td>FY27 컨센 EPS $177 × 9x (사이클 피크 배수 6~12x 중간)</td><td>시장이 4~8x만 줄 수도 (역사적 피크 배수)</td><td class="num">25%</td></tr>
+<tr><td>③ EV/EBITDA</td><td class="num">$820</td><td>FY27E EBITDA ~$19.5B × 6x + 순현금</td><td>피크 EBITDA에 통상 4~6x — 가장 보수적</td><td class="num">10%</td></tr>
+<tr><td>④ EV/Sales</td><td class="num">$1,330</td><td>FY27 매출 $41B × 5x + 순현금</td><td>마진 구조 변화(LTA)를 반영 못 함</td><td class="num">15%</td></tr>
+<tr><td>⑤ PEG</td><td class="num">—</td><td>FY27 성장 +174% → PEG 무의미</td><td>사이클 스파이크에 부적합 — <b>가중 0</b></td><td class="num">0%</td></tr>
+<tr><td>⑥ 정상화 이익</td><td class="num">$1,540</td><td>정상화 EPS $110 (GS) × 14x (Bernstein 스루사이클 배수)</td><td>정상화 EPS 추정이 $110~214로 기관마다 2배 차</td><td class="num">20%</td></tr>
+<tr><td>⑦ 시나리오 EV</td><td class="num">$1,550</td><td>아래 3장 — 확률×목표가 합산</td><td>확률은 주관적 추정</td><td class="num">15%</td></tr>
+<tr><td>⑧ LTA 플로어</td><td class="num">$1,075</td><td>가격 급락 스트레스에서 계약 보호 EPS × 트로프 배수</td><td>커버리지 실체가 8/5 전 미공개</td><td class="num">바닥 전용</td></tr>
+<tr style="font-weight:700;"><td>가중 FV</td><td class="num">$1,340</td><td colspan="2">①15+②25+③10+④15+⑥20+⑦15</td><td class="num">100%</td></tr>
+</table></div>
+<p class="small">역DCF 참고: 현재가 $1,437이 내재하는 조건 = "FY27 컨센 달성 + 이후 5년간 완만한 감쇠" — 즉 시장은 슈퍼사이클 지속도, 2018년형 붕괴도 아닌 <b>중간 경로를 프라이싱 중</b>. (참고 리포트의 "내재 CAGR 33% vs 실제 85% → 강한 저평가" 계산은 피크 점프를 CAGR로 외삽한 오류로 채택하지 않음)</p>
+
+<!-- ═══ 시나리오 ═══ -->
+<h2><span class="no">3</span>12개월 시나리오 (8/5·8/13이 확률을 갱신)</h2>
+<div class="scn">
+<div class="card" style="border-top:3px solid var(--good);">
+<div class="p" style="color:var(--good);">Bull 25% → $2,200</div>
+<ul class="small">
+<li>8/5: LTA 커버리지 50%+ · 백로그 $42B→$50B+ (Meta 편입)</li>
+<li>FY27 가이드가 컨센($41B/$177) 상회</li>
+<li>3Q 계약가 +10~15% 실현, CAPEX 체제 해제</li>
+<li>배수: $183~243 × 10~12x — GS·Bernstein 앵커 방향</li>
+</ul></div>
+<div class="card" style="border-top:3px solid var(--accent);">
+<div class="p" style="color:var(--accent);">Base 45% → $1,550</div>
+<ul class="small">
+<li>실적 인라인, 커버리지 "1/3+" 재확인 수준</li>
+<li>박스권(하단 $1,350~상단 $1,750) 연장 후 완만한 상향</li>
+<li>배수: $177 × 8~9x 유지 — 지속성 의심 잔존</li>
+</ul></div>
+<div class="card" style="border-top:3px solid var(--crit);">
+<div class="p" style="color:var(--crit);">Bear 30% → $1,000</div>
+<ul class="small">
+<li>2H27 낸드 완화가 조기 컨센화 · 첫 EPS 하향 등장</li>
+<li>소비자향 약세가 FQ1'27 가이드에 반영</li>
+<li>배수: EPS 하향분 × 6~8x → LTA 플로어 존에서 바닥</li>
+</ul></div>
+</div>
+
+<!-- ═══ 레벨 지도 ═══ -->
+<h2><span class="no">4</span>가격 지도 — 밸류에이션 × 트레이딩 레벨 통합</h2>
+<div class="tw"><table>
+<tr><th class="num">레벨</th><th>의미</th><th>근거</th></tr>
+<tr><td class="num">$2,354</td><td>전고점 (6/22)</td><td>탈환에 +64% 필요 — Bull 연장 시나리오 전용</td></tr>
+<tr><td class="num">$2,188</td><td>IB 컨센 평균</td><td>23명 · 최고 $3,169(Bernstein $3,000, GS $2,200 포함)</td></tr>
+<tr><td class="num">$1,700~2,000</td><td><b>익절 존</b> (기존 사다리)</td><td>넥라인 돌파~심리 저항 · Bull 진입 확인 구간</td></tr>
+<tr><td class="num">$1,550</td><td>시나리오 기대값</td><td>확률 가중 균형점</td></tr>
+<tr style="background:var(--accent-soft);"><td class="num"><b>$1,437</b></td><td><b>현재가</b></td><td>고점 -39% · FY27 컨센의 8.1x</td></tr>
+<tr><td class="num">$1,340</td><td>6-Method 가중 FV</td><td>본 리포트 산출</td></tr>
+<tr><td class="num">$1,350</td><td><b>판정선</b> (종가)</td><td>랠리 50% 되돌림 · 이탈 시 반등 종료 판정, 추가매수 중단</td></tr>
+<tr><td class="num">$1,150~1,000</td><td><b>LTA 플로어 존</b></td><td>계약 보호가 실적을 받치는 밸류 바닥 ≈ 애널리스트 최저가</td></tr>
+<tr><td class="num">$1,000 미만</td><td>구조 붕괴 영역</td><td>LTA 이행 리스크(백로그 취소)가 현실화된 경우만</td></tr>
+</table></div>
+
+<!-- ═══ 리스크 신호등 ═══ -->
+<h2><span class="no">5</span>리스크 신호등 (사이클 정점 판별 6종)</h2>
+<div class="tw"><table>
+<tr><th>신호</th><th>상태</th><th>현재 판독</th></tr>
+<tr><td>① 컨센 EPS 하향 시작</td><td><span class="tag good">꺼짐</span></td><td>FY27 컨센 $112→$177 상향 지속 (S&amp;P Global 19명)</td></tr>
+<tr><td>② 계약가 하락 전환</td><td><span class="tag good">꺼짐</span></td><td>3Q26 +10~15% 상승 전망 (TrendForce)</td></tr>
+<tr><td>③ 재고 누적</td><td><span class="tag good">꺼짐</span></td><td>공급사 eSSD 재고 사상 최저 · 2026 완판</td></tr>
+<tr><td>④ 증산 경쟁</td><td><span class="tag good">꺼짐</span></td><td>산업 낸드 CAPEX +5% · 신규 팹 2028H2~29 가동</td></tr>
+<tr><td>⑤ 스팟 선행 하락</td><td><span class="tag warn">황색</span></td><td>512Gb TLC 주간 -2.9%→-1.3% (소비자향 한정, 폭 축소 중)</td></tr>
+<tr><td>⑥ 2H27 완화 전망</td><td><span class="tag warn">황색</span></td><td>TrendForce 2H27 균형 · Goldman 부족 정점 2027 — D램(2028 정점)보다 1~1.5년 짧은 사이클</td></tr>
+</table></div>
+<p class="small">6개 중 완전 점등 0개 · 황색 2개 — 과거 정점 확정은 3~4개 점등에서 발생. 단 황색 2개가 모두 낸드 쪽이라 D램(MU) 대비 시계가 짧다는 판정 유지.</p>
+
+<!-- ═══ 8/5 체크리스트 ═══ -->
+<h2><span class="no">6</span>8/5 실적 · 8/13 인베스터 데이 체크리스트</h2>
+<div class="card">
+<ul style="font-size:.9em;">
+<li><b>FQ4 숫자</b>: 가이던스 $7.75~8.25B / EPS $30~33 · 컨센 $8.42B / $34.67 — <b>컨센이 가이던스 상단 초과 = 비트가 기본값, 서프라이즈 가치 낮음</b></li>
+<li><b>승부처 1 — LTA 커버리지</b>: FY27 빗 "1/3 이상" → <b>50%+ 선언 여부</b> (CEO가 이미 가능성 공언). 계약 5→6건+, $42B 상향(Meta 미포함분 편입) 여부</li>
+<li><b>승부처 2 — FQ1'27 가이던스</b>: 컨센 상회 여부가 당일 방향 결정 (기저율: 조정 유지+비트+가이드 상회 조합은 65~75% 상승)</li>
+<li><b>승부처 3 — 가격 구조</b>: "fixed and variable" 조항의 실체 = 플로어형(상방 개방) 확인 시 리레이팅 근거</li>
+<li>옵션시장 내재 변동폭 <b>±25%</b> (평소의 3배) — 어느 쪽이든 크게 움직임. 8/13에 장기 재무모델·HBF 로드맵 추가 공개</li>
+</ul>
+</div>
+
+<!-- ═══ 정정 사항 ═══ -->
+<div class="fixbox">
+<b>참고 리포트 대비 정정한 항목</b> — ① 실적일 8/14 → <b>8/5</b> ② 회계연도 9월 → <b>6월 말~7월 초 종료</b> ③ "HBM 계약" → SNDK는 낸드 순수플레이 (해당 로드맵은 <b>HBF</b>, 2030년 전후) ④ CXMT(D램)를 낸드 직접 리스크에서 제외, YMTC로 대체 ⑤ 주식수 65M/150.9M/157M 혼용 → <b>희석 157M 단일화</b> ⑥ FY27 EPS $212.60 → 컨센 확인치 <b>$177</b> (S&amp;P Global 19명; $212.60은 미확인) ⑦ 52주 고가 $1,861 → <b>$2,354</b> ⑧ 피크 EPS × 19.7x 방식(GS-WEV $3,883) 폐기 → 정상화·사이클 배수로 대체 ⑨ Bernstein $214/$81은 FY27이 아니라 <b>FY2030 스트레스 테스트</b> 수치 (FY27 베이스 $243)
+</div>
+
+<h2 style="border-top:none; padding-top:0;"><span class="no">§</span>핵심 출처</h2>
+<p class="small">SanDisk FQ3'26 8-K/PR·10-Q (SEC, 4/30·5/1) · S&amp;P Global/Simply Wall St 컨센서스 (7월) · StockAnalysis 목표가 집계 (평균 $2,188/23명) · Bernstein $3,000 노트 보도 (7/21, Investing.com·Yahoo) · Goldman $2,200 (7월, 정상화 EPS $110×20x) · TrendForce 낸드 수급 (7/21)·스팟 주간 · Goldman 낸드 부족 전망 (4.4/4.6/3.0%) · Motley Fool 7/24 종가. 상충 데이터(FY27 매출 $41B vs ~$50B)는 보수치 채택. WACC 10%·사이클 감쇠 경로는 작성자 가정.</p>
+
+<div class="foot">
+<p><b>면책조항</b> — 본 자료는 12개 방법론 중 어느 것도 단독 정답이 아니라는 전제 위에서 작성된 개인 리서치 보조 자료이며, 투자 자문이 아닙니다. 모든 확률·배수·감쇠 경로는 주관적 추정이고, 8/5·8/13 공개 정보로 무효화될 수 있습니다. 투자 손익의 책임은 투자자 본인에게 있습니다.</p>
+<p>2026-07-26 · CIO 종합 (입력값 독립 검증: company-analyst) · 다음 갱신: 8/5 실적 직후</p>
+</div>
+</main>
