@@ -1,0 +1,218 @@
+<title>MU 적정주가 멀티메소드 리포트 · 2026-07-26</title>
+<style>
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9;
+  --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e;
+  --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+  --accent:#6b9fe8; --accent-soft:#22304a; --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+  --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e; --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32; }
+}
+:root[data-theme="dark"]{ --bg:#15181e; --panel:#1c2028; --ink:#e6e4dd; --ink2:#9aa0ae; --line:#2e333d;
+  --accent:#6b9fe8; --accent-soft:#22304a; --c-blue:#5b9be0; --c-orange:#e09a55; --c-aqua:#4db3aa; --c-yellow:#cfae4e; --c-magenta:#c97bad;
+  --good:#5cb885; --warn:#d9a05b; --crit:#d97b6e; --good-bg:#1e3328; --warn-bg:#37301f; --crit-bg:#3a2522; --neut-bg:#262a32; }
+:root[data-theme="light"]{ --bg:#f6f5f1; --panel:#ffffff; --ink:#20242c; --ink2:#5a6070; --line:#e3e1d9;
+  --accent:#2a5fb8; --accent-soft:#e8eef9; --c-blue:#2a78d6; --c-orange:#d97c2b; --c-aqua:#26978f; --c-yellow:#b8952a; --c-magenta:#b0508e;
+  --good:#2e7d4f; --warn:#b06a1c; --crit:#b03a2e; --good-bg:#e5f2ea; --warn-bg:#f7ecdc; --crit-bg:#f7e3e0; --neut-bg:#ececec; }
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.6; margin:0; padding:0 20px 80px;}
+main{max-width:960px; margin:0 auto;}
+h1{font-size:1.65em; letter-spacing:-.01em; margin:.2em 0 .2em; text-wrap:balance;}
+h2{font-size:1.18em; margin:2.4em 0 .6em; padding-top:1.1em; border-top:1px solid var(--line);}
+h2 .no{color:var(--accent); font-variant-numeric:tabular-nums; margin-right:.4em; font-size:.85em;}
+p{margin:.5em 0;}
+.small{font-size:.83em; color:var(--ink2);}
+header{padding:2.2em 0 1em;}
+table{border-collapse:collapse; width:100%; font-size:.86em; font-variant-numeric:tabular-nums;}
+th{font-size:.78em; text-transform:uppercase; letter-spacing:.05em; color:var(--ink2); text-align:left; padding:8px 10px; border-bottom:2px solid var(--line); white-space:nowrap;}
+td{padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+.tw{overflow-x:auto; margin:1em 0; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:6px 10px;}
+.num{text-align:right; white-space:nowrap;}
+.tag{display:inline-block; font-size:.72em; font-weight:700; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.tag.good{background:var(--good-bg); color:var(--good);}
+.tag.warn{background:var(--warn-bg); color:var(--warn);}
+.tag.crit{background:var(--crit-bg); color:var(--crit);}
+.tag.neut{background:var(--neut-bg); color:var(--ink2);}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 22px; margin:1em 0;}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:1em 0;}
+.kpi{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:13px 16px;}
+.kpi .v{font-size:1.3em; font-weight:800; font-variant-numeric:tabular-nums;}
+.kpi .l{font-size:.76em; color:var(--ink2); margin-top:2px;}
+.verdict{border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:1.2em 0;}
+ul{margin:.4em 0; padding-left:1.3em;}
+li{margin:.3em 0;}
+.ff{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px 20px 8px; margin:1em 0;}
+.ffrow{display:flex; align-items:center; gap:10px; margin:9px 0; font-size:.83em;}
+.fflbl{flex:0 0 190px; text-align:right; line-height:1.25;}
+.fflbl .m{font-weight:700;}
+.fflbl .c{display:block; font-size:.85em; color:var(--ink2);}
+.fftrk{flex:1; height:20px; background:var(--neut-bg); border-radius:4px; position:relative;}
+.ffbar{position:absolute; top:3px; height:14px; border-radius:3px; opacity:.75;}
+.ffdot{position:absolute; top:50%; transform:translate(-50%,-50%); width:9px; height:9px; border-radius:50%; background:var(--ink); border:2px solid var(--panel);}
+.ffnow{position:absolute; top:-4px; bottom:-4px; width:2px; background:var(--crit);}
+.ffval{flex:0 0 118px; font-variant-numeric:tabular-nums; font-size:.95em;}
+.ffval b{display:block;}
+.axis{display:flex; justify-content:space-between; font-size:.72em; color:var(--ink2); padding-left:200px; margin-top:4px;}
+.scn{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin:1em 0;}
+.scn .card{margin:0;}
+.scn .p{font-size:1.4em; font-weight:800;}
+.foot{margin-top:3em; padding-top:1.2em; border-top:1px solid var(--line); font-size:.8em; color:var(--ink2);}
+.fixbox{background:var(--warn-bg); border-left:4px solid var(--warn); border-radius:0 8px 8px 0; padding:12px 16px; margin:1em 0; font-size:.85em;}
+</style>
+
+<main>
+<header>
+<div class="small" style="letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:700;">MU Multi-Method Valuation · CIO 종합</div>
+<h1>Micron (MU) 적정주가 리포트 — 8개 방법론 교차 검증</h1>
+<p class="small">기준: 2026-07-24 종가 $920.95 (금 -7.0%) · 발행 1,129.4M주 · 시총 $1.04T · <b>순현금 $24.4B</b> (현금 $30.2B, 분기 중 부채 $4.4B 상환) · 52주 $103.38~1,255 (고점 -26.6%) · 작성 2026-07-26 · <b>FQ4 실적 발표 9/29 (확정)</b></p>
+</header>
+
+<div class="verdict">
+<h2 style="border:none; padding:0; margin:0 0 .4em;">종합 판정: <span class="tag good" style="font-size:.8em;">보유 + 분할매수 (SNDK보다 반 단계 위)</span> &nbsp;신뢰도 62/100</h2>
+<ul style="font-size:.92em;">
+<li><b>현 주가 $921 = 6-Method 가중 FV $925와 사실상 동일 (+0.4%)</b> — SNDK와 마찬가지로 시장은 베이스 시나리오를 정확히 프라이싱 중. 단 <b>상방 분포가 SNDK보다 두껍습니다</b>: 시나리오 기대값 +21%(SNDK +8%), 컨센 평균 +62~70%.</li>
+<li>차이의 원천은 사이클 수명: D램 부족 정점 <b>2028년</b>(DB/가트너 129%) vs 낸드 2027 — 이익 활주로가 1~1.5년 더 깁니다.</li>
+<li><b>SCA 16건이 하방을 구조적으로 받칩니다</b>: 현금·신용장 $22B 수취, 최저가격 기준 누적 매출 $100B+, 가격 하한 = "과거 사이클 최고 GM 이상" — 역대 메모리 사이클에 없던 계약 구조.</li>
+<li>리스크 상위: HBM 신규 수출규제(검토 보도 단계), CXMT 상장(7/27), FY27 컨센 리비전의 되돌림.</li>
+</ul>
+</div>
+
+<div class="grid">
+<div class="kpi"><div class="v">$925</div><div class="l">6-Method 가중 FV (+0.4%)</div></div>
+<div class="kpi"><div class="v">$1,115</div><div class="l">시나리오 가중 기대값 (+21%)</div></div>
+<div class="kpi"><div class="v">$1,492~1,569</div><div class="l">IB 컨센 평균 (S&amp;P 45명/TipRanks, +62~70%)</div></div>
+<div class="kpi"><div class="v">$650~800</div><div class="l">SCA 플로어 존 (-13~-29%)</div></div>
+</div>
+
+<h2><span class="no">1</span>Football Field — 8개 방법론 한눈에 (축: $300 ~ $2,300)</h2>
+<div class="ff">
+<div class="ffrow"><div class="fflbl"><span class="m">① DCF (사이클 조정)</span><span class="c">함정: 다운사이클 가정이 지배</span></div>
+<div class="fftrk"><div class="ffbar" style="left:7.5%; width:17.5%; background:var(--c-blue);"></div><div class="ffdot" style="left:15%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$600</b><span class="small">$450~800</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">② Fwd P/E 6~10x</span><span class="c">FY27 EPS $121.77 (중간치)</span></div>
+<div class="fftrk"><div class="ffbar" style="left:21.6%; width:24.4%; background:var(--c-blue);"></div><div class="ffdot" style="left:33.7%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$974</b><span class="small">$731~1,218</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">③ EV/EBITDA 4~5.5x</span><span class="c">피크 이익 × 피크 배수 — 최보수</span></div>
+<div class="fftrk"><div class="ffbar" style="left:11%; width:14%; background:var(--c-blue);"></div><div class="ffdot" style="left:17.5%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$650</b><span class="small">$520~800</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">④ EV/Sales 3.5~5.5x</span><span class="c">FY27 매출 $180~250B (단일소스 주의)</span></div>
+<div class="fftrk"><div class="ffbar" style="left:13.5%; width:32.5%; background:var(--c-aqua);"></div><div class="ffdot" style="left:28%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$860</b><span class="small">$569~1,218</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑤ PEG</span><span class="c">사이클 스파이크 왜곡 — 가중 제외</span></div>
+<div class="fftrk"><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><span class="tag neut">제외</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑥ 정상화 이익</span><span class="c">GS $62×18x ~ SCA 반영 $90×16x</span></div>
+<div class="fftrk"><div class="ffbar" style="left:31.5%; width:23.5%; background:var(--c-magenta);"></div><div class="ffdot" style="left:42.5%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$1,150</b><span class="small">$930~1,400</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑦ 시나리오 가중 EV</span><span class="c">Bull 30 / Base 45 / Bear 25</span></div>
+<div class="fftrk"><div class="ffbar" style="left:17.5%; width:40%; background:var(--c-orange);"></div><div class="ffdot" style="left:40.8%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$1,115</b><span class="small">$650~1,450</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">⑧ SCA 플로어 (하방 바닥)</span><span class="c">예치 $22B·최저매출 $100B·GM 하한</span></div>
+<div class="fftrk"><div class="ffbar" style="left:17.5%; width:7.5%; background:var(--good);"></div><div class="ffdot" style="left:21.3%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>$725</b><span class="small">$650~800</span></div></div>
+
+<div class="ffrow"><div class="fflbl"><span class="m">참고: IB 컨센</span><span class="c">최고 $2,200 · 최저 $1,100(GS Neutral)</span></div>
+<div class="fftrk"><div class="ffbar" style="left:40%; width:55%; background:var(--c-yellow); opacity:.45;"></div><div class="ffdot" style="left:61.5%;"></div><div class="ffnow" style="left:31%;"></div></div>
+<div class="ffval"><b>~$1,530</b><span class="small">$1,100~2,200</span></div></div>
+<div class="axis"><span>$300</span><span>$800</span><span>$1,300</span><span>$1,800</span><span>$2,300</span></div>
+<p class="small" style="margin:8px 0 6px;">붉은 세로선 = 현재가 $920.95 · <b>주목: 최저 목표가($1,100, GS Neutral)조차 현재가보다 +19% 위 — 셀사이드 전체가 현재가 위에 있는 드문 구도</b></p>
+</div>
+
+<h2><span class="no">2</span>방법론별 산출 근거</h2>
+<div class="tw"><table>
+<tr><th>방법</th><th class="num">베이스</th><th>산식</th><th>이 방법의 함정</th><th class="num">가중치</th></tr>
+<tr><td>① DCF</td><td class="num">$600</td><td>FY27 FCF ~$80B → 다운사이클 감쇠(→$25~35B) → 터미널 3%, WACC 10%</td><td>정상화 FCF 가정 ±$10B에 주당 ±$150 흔들림</td><td class="num">15%</td></tr>
+<tr><td>② Fwd P/E</td><td class="num">$974</td><td>FY27 컨센 $121.77 (3점 $98.5/$121.8/$149.6 중 중간) × 8x</td><td>컨센이 4주 새 +52% 리비전 — 어느 시점 값이냐가 결과를 결정</td><td class="num">25%</td></tr>
+<tr><td>③ EV/EBITDA</td><td class="num">$650</td><td>FY27E EBITDA ~$120~150B × 4~5x + 순현금 $24.4B</td><td>피크 EBITDA에 피크 배수 — 역사상 가장 보수적 각도</td><td class="num">10%</td></tr>
+<tr><td>④ EV/Sales</td><td class="num">$860</td><td>FY27 매출 $180~250B × 3.5~5.5x</td><td>매출 $250B은 단일 소스 — 하단 $180B 병용</td><td class="num">15%</td></tr>
+<tr><td>⑤ PEG</td><td class="num">—</td><td>FY27 성장 +66~104% → 무의미</td><td>가중 0 (원 리포트도 동일 판단 — 정확)</td><td class="num">0%</td></tr>
+<tr><td>⑥ 정상화 이익</td><td class="num">$1,150</td><td>GS 정상화 $62×18x=$1,116 ↔ SCA 하한 반영 $90×16x=$1,440의 중간</td><td>SCA가 정상화 EPS 자체를 끌어올렸는지가 최대 논쟁 — GS는 아직 반영 소극적</td><td class="num">20%</td></tr>
+<tr><td>⑦ 시나리오 EV</td><td class="num">$1,115</td><td>아래 3장</td><td>확률 주관적</td><td class="num">15%</td></tr>
+<tr><td>⑧ SCA 플로어</td><td class="num">$725</td><td>다운사이클에서 SCA 커버분(D램 20%·낸드 1/3)이 GM 하한 보장 → 플로어 EPS ~$50 × 트로프 배수 13~15x</td><td>커버리지가 "매출 절반"까지 확대되면 플로어 상향</td><td class="num">바닥 전용</td></tr>
+<tr style="font-weight:700;"><td>가중 FV</td><td class="num">$925</td><td colspan="2">①15+②25+③10+④15+⑥20+⑦15</td><td class="num">100%</td></tr>
+</table></div>
+
+<h2><span class="no">3</span>12개월 시나리오 (판별일: 9/29 가이던스 · 7/27 CXMT · 수출규제 확정)</h2>
+<div class="scn">
+<div class="card" style="border-top:3px solid var(--good);">
+<div class="p" style="color:var(--good);">Bull 30% → $1,450</div>
+<ul class="small">
+<li>9/29: FQ4 $50B 달성 + FQ1'27 가이드 상회</li>
+<li>HBM4 2027 프리미엄 +40~50% 계약 확정</li>
+<li>수출규제가 기존 계약 예외로 확정</li>
+<li>배수: $122~150 × 10~12x — 컨센 평균과 수렴</li>
+</ul></div>
+<div class="card" style="border-top:3px solid var(--accent);">
+<div class="p" style="color:var(--accent);">Base 45% → $1,150</div>
+<ul class="small">
+<li>가이던스 인라인, 리비전 상향 지속되나 속도 둔화</li>
+<li>박스(하단 $849~상단 $1,010) 상향 이탈 후 완만한 상승</li>
+<li>배수: $122 × 8~9x + 정상화 리레이팅 개시</li>
+</ul></div>
+<div class="card" style="border-top:3px solid var(--crit);">
+<div class="p" style="color:var(--crit);">Bear 25% → $650</div>
+<ul class="small">
+<li>HBM 신규 수출규제가 광범위 확정 or 매크로 침체</li>
+<li>FY27 리비전 하향 반전 (첫 컨센 컷)</li>
+<li>배수: EPS 하향 $90 × 7x → SCA 플로어 존에서 바닥</li>
+</ul></div>
+</div>
+
+<h2><span class="no">4</span>가격 지도 — 밸류에이션 × 트레이딩 레벨 통합</h2>
+<div class="tw"><table>
+<tr><th class="num">레벨</th><th>의미</th><th>근거</th></tr>
+<tr><td class="num">$1,255</td><td>전고점 (6/25)</td><td>탈환에 +36% — 컨센 목표가($1,492~1,569) 경로상 통과점</td></tr>
+<tr><td class="num">$1,492~1,569</td><td>IB 컨센 평균</td><td>45명 · 최저치(GS $1,100)도 현재가 +19%</td></tr>
+<tr><td class="num">$1,150</td><td>시나리오 Base = 정상화 베이스</td><td>두 방법이 수렴하는 12개월 중심 목표</td></tr>
+<tr><td class="num">$1,000~1,010</td><td>박스 상단 (심리+200일선)</td><td>돌파 시 정상화 리레이팅 개시 신호</td></tr>
+<tr style="background:var(--accent-soft);"><td class="num"><b>$921</b></td><td><b>현재가</b></td><td>= 가중 FV $925 · FY27 중간 컨센의 7.6x</td></tr>
+<tr><td class="num">$849~855</td><td><b>판정선</b> (종가)</td><td>7/20 저점 — 이탈 시 반등 종료 판정</td></tr>
+<tr><td class="num">$785~800</td><td>축소선 (랠리 50% 되돌림)</td><td>+ EPS 하향 동반 시 비중 절반 축소</td></tr>
+<tr><td class="num">$650~800</td><td><b>SCA 플로어 존</b></td><td>계약 하한이 이익을 받치는 밸류 바닥 · GS Bear $547은 SCA 미반영 각도</td></tr>
+</table></div>
+
+<h2><span class="no">5</span>리스크 신호등 (사이클 정점 판별 6종 — D램 기준)</h2>
+<div class="tw"><table>
+<tr><th>신호</th><th>상태</th><th>현재 판독</th></tr>
+<tr><td>① 컨센 EPS 하향 시작</td><td><span class="tag good">꺼짐</span></td><td>FY27 컨센 4주 새 $98.5→$149.6 — 사상급 상향 속도</td></tr>
+<tr><td>② 계약가 하락 전환</td><td><span class="tag good">꺼짐</span></td><td>3Q26 서버 D램 +13~18% (TrendForce), SCA가 하한 고정</td></tr>
+<tr><td>③ 재고 누적</td><td><span class="tag good">꺼짐</span></td><td>HBM·서버 D램 CY2027 완판, 주문 2028년까지</td></tr>
+<tr><td>④ 증산 경쟁</td><td><span class="tag good">꺼짐</span></td><td>공급 응답(P5·M17·CXMT 램프)은 2028~29 — DB/가트너 부족 정점 2028 (129%)</td></tr>
+<tr><td>⑤ 스팟 선행 하락</td><td><span class="tag good">꺼짐</span></td><td>D램 현물 보합~상승 (DDR4/DDR3 상승) — 낸드와 다름</td></tr>
+<tr><td>⑥ 완화 전망 컨센화</td><td><span class="tag neut">주시</span></td><td>D램 완화 컨센은 2029~30 — 낸드(2H27)보다 1.5년+ 여유. 단 CXMT 상장(7/27)발 서사 변동 감시</td></tr>
+</table></div>
+<p class="small">6개 중 점등 0개 — <b>SNDK(황색 2개)와의 차이가 곧 MU:SNDK=2:1 배분의 근거</b>입니다.</p>
+
+<h2><span class="no">6</span>다음 체크포인트</h2>
+<div class="card">
+<ul style="font-size:.9em;">
+<li><b>7/27 (월)</b>: CXMT 상하이 상장 — 중국 D램 서사의 재점화 여부 (기술 격차 2~3년, HBM 웨이퍼 2% 미만이 실체)</li>
+<li><b>7/29 (화)</b>: SK하이닉스 실적 — D램 ASP·HBM4 코멘트가 MU 기대치를 선행 조정</li>
+<li><b>8월 중</b>: HBM 신규 수출규제 확정 여부 (현재 '검토 보도' 단계) — Bear 시나리오의 1번 트리거</li>
+<li><b>9/29 (화)</b>: FQ4 실적 — $50B 가이던스 달성 + FQ1'27 가이드가 12개월 방향 결정. 12/9 CHIPS 자사주 제한 만료도 후속 재료</li>
+</ul>
+</div>
+
+<div class="fixbox">
+<b>참고 리포트 검증 결과</b> — 이 MU 리포트는 SNDK 리포트보다 훨씬 정확했음: FQ3 실적·FQ4 가이던스·9/29 발표일·SCA 16건·HBM CY27 완판·GS Neutral $1,100 전부 1차 소스와 일치 ✅. 정정 4건: ① 순현금 $2.4B → <b>$24.4B</b> (현금 $30.2B/부채 $5.7B — 오히려 유리한 방향의 오류) ② 평균 목표가 $1,588 → 확인치 <b>$1,492~1,569</b> ③ 손절가 $800/$950 내부 모순 → 본 리포트는 판정선 $849·축소선 $785로 일원화 ④ FY27 EPS 단일값 → 리비전 급상향 중이라 3점 병기($98.5/$121.8/$149.6) 필수. GS-WEV $1,460은 피크 EPS 고배수 문제가 있으나 D램은 사이클이 길어 SNDK 케이스보다는 왜곡이 작음.
+</div>
+
+<h2 style="border-top:none; padding-top:0;"><span class="no">§</span>핵심 출처</h2>
+<p class="small">Micron FQ3'26 8-K/PR·10-Q (SEC, 6/24·이후) · SCA 상세 (Tom's Hardware·TrendForce·wccftech 6월 말) · S&amp;P Global 45명/TipRanks 목표가 집계 · GS 노트 (normalized $62×18x, futunn 해설) · MS $1,200·BofA $1,550·Bernstein $1,300 · FY27 컨센 3점 (Fool 6/16·7/4, FQ3 직후 노트) · DB/가트너 D램 수급 (사용자 제공, 2028 정점 129%) · TrendForce 3Q 계약가. WACC 10%·사이클 감쇠·SCA 플로어 EPS는 작성자 가정.</p>
+
+<div class="foot">
+<p><b>면책조항</b> — 본 자료는 어떤 방법론도 단독 정답이 아니라는 전제의 개인 리서치 보조 자료이며 투자 자문이 아닙니다. 모든 확률·배수·플로어 추정은 주관적이며 9/29 및 규제 확정으로 무효화될 수 있습니다. 투자 손익의 책임은 투자자 본인에게 있습니다.</p>
+<p>2026-07-26 · CIO 종합 (입력값 독립 검증: company-analyst) · 다음 갱신: 7/29 하이닉스 실적 또는 수출규제 확정 시</p>
+</div>
+</main>
